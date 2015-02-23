@@ -1,0 +1,77 @@
+!-- XTerm / Urxvt settings ----------------------------------------------------
+URxvt.saveLines:        5000
+URxvt.font:             -xos4-Terminus-Medium-R-Normal--12-120-72-72-C-60-ISO8859-1
+URxvt.smoothScroll:     on
+URxvt.scrollBar_right:  false
+URxvt.scrollBar:        false
+URxvt.borderLess:       false
+URxvt.urgentOnBell:     true
+URxvt.depth:            32
+URxvt.background:       [50]#000000
+!URxvt.letterSpace:      0
+
+URxvt.perl-ext:         default,matcher
+URxvt.url-launcher:     /usr/bin/firefox
+URxvt.matcher.button:   1
+URxvt.colorUL:          #4682B4
+
+Xft.autohint:           0
+Xft.lcdfilter:          lcddefault
+Xft.hintstyle:          hintfull
+Xft.hinting:            1
+Xft.antialias:          1
+Xft.rgba:               rgb
+Xft.dpi:                96
+
+
+!-- Colours scheme ------------------------------------------------------------
+!
+!-- Normal Colours ------------------------------------------------------------
+!
+!Index    Color         Name     Hue Sat Value
+!-------  -------       -------  --- --- -----
+!color0   Dark Black    #000000  0   0   0
+!color1   Dark Red      #805959  0   50  50
+!color2   Dark Green    #598059  120 30  50
+!color3   Dark Yellow   #807359  40  30  50
+!color4   Dark Blue     #596D80  210 30  50
+!color5   Dark Magenta  #735980  280 30  50
+!color6   Dark Cyan     #598079  170 30  50
+!color7   Dark White    #999999  0   0   60
+
+*color0:  #000000
+*color1:  #805959
+*color2:  #598059
+*color3:  #807359
+*color4:  #596D80
+*color5:  #735980
+*color6:  #598079
+*color7:  #999999
+
+!-- Bright Colours ------------------------------------------------------------
+!
+!Index    Color    Name     Hue Sat Value
+!-------  -------  -------  --- --- -----
+!color8   Black    #333333  0   0   20
+!color9   Red      #994D4D  0   50  60
+!color10  Green    #6B996B  120 30  60
+!color11  Yellow   #998A6B  40  30  60
+!color12  Blue     #6B8299  210 30  60
+!color13  Magenta  #896A99  280 30  60
+!color14  Cyan     #6B9991  170 30  60
+!color15  White    #B3B3B3  0   0   70
+
+
+*color8:  #333333
+*color9:  #994D4D
+*color10: #6B996B
+*color11: #998A6B
+*color12: #6B8299
+*color13: #896A99
+*color14: #6B9991
+*color15: #B3B3B3
+
+!-- Terminal colours ----------------------------------------------------------
+*foreground:  #B3B3B3
+*cursorColor: #3D5866
+

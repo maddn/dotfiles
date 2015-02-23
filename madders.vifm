@@ -1,0 +1,281 @@
+" You can edit this file by hand.
+" The " character at the beginning of a line comments out the line.
+" Blank lines are ignored.
+
+" The Default color scheme is used for any directory that does not have
+" a specified scheme and for parts of user interface like menus. A
+" color scheme set for a base directory will also
+" be used for the sub directories.
+
+" The standard ncurses colors are:
+" Default = -1 = None, can be used for transparency or default color
+" Black = 0
+" Red = 1
+" Green = 2
+" Yellow = 3
+" Blue = 4
+" Magenta = 5
+" Cyan = 6
+" White = 7
+
+" Light versions of colors are also available (set bold attribute):
+" LightBlack
+" LightRed
+" LightGreen
+" LightYellow
+" LightBlue
+" LightMagenta
+" LightCyan
+" LightWhite
+
+" Available attributes (some of them can be combined):
+" bold
+" underline
+" reverse or inverse
+" standout
+" none
+
+" Vifm supports 256 colors you can use color numbers 0-255
+" (requires properly set up terminal: set your TERM environment variable
+" (directly or using resources) to some color terminal name (e.g.
+" xterm-256color) from /usr/lib/terminfo/; you can check current number
+" of colors in your terminal with tput colors command)
+
+" highlight group cterm=attrs ctermfg=foreground_color ctermbg=background_color
+
+highlight Win              cterm=none     ctermfg=white     ctermbg=default
+
+highlight Directory        cterm=bold     ctermfg=blue      ctermbg=default
+highlight Executable       cterm=bold     ctermfg=red       ctermbg=default
+
+highlight BrokenLink       cterm=none     ctermfg=black     ctermbg=red
+highlight Device           cterm=none     ctermfg=black     ctermbg=yellow
+highlight Fifo             cterm=none     ctermfg=black     ctermbg=green
+highlight Link             cterm=none     ctermfg=black     ctermbg=blue
+highlight Socket           cterm=none     ctermfg=black     ctermbg=magenta
+
+highlight Selected         cterm=bold,inverse ctermfg=black ctermbg=red
+highlight CurrLine         cterm=none     ctermfg=black     ctermbg=blue
+highlight TopLine          cterm=bold     ctermfg=yellow    ctermbg=8
+highlight TopLineSel       cterm=bold     ctermfg=cyan      ctermbg=8
+highlight StatusLine       cterm=bold     ctermfg=yellow    ctermbg=8
+highlight Border           cterm=none     ctermfg=black     ctermbg=default
+
+highlight WildMenu         cterm=underline,reverse ctermfg=white ctermbg=black
+highlight CmdLine          cterm=none     ctermfg=white     ctermbg=default
+highlight ErrorMsg         cterm=none     ctermfg=red       ctermbg=black
+
+
+" File extention highlighing
+
+" Text that we can edit with a regular editor
+highlight /.*\.md$|
+          \.*\.mkd$|
+          \.*\.txt$|
+          \.*\.org$/I cterm=none ctermfg=cyan ctermbg=default
+
+" Source text
+highlight /.*\.0$|
+          \.*\.2$|
+          \.*\.3$|
+          \.*\.4$|
+          \.*\.5$|
+          \.*\.6$|
+          \.*\.7$|
+          \.*\.8$|
+          \.*\.9$|
+          \.*\.C$|
+          \.*\.c$|
+          \.*\.cc$|
+          \.*\.coffee$|
+          \.*\.cpp$|
+          \.*\.csh$|
+          \.*\.css$|
+          \.*\.cxx$|
+          \.*\.el$|
+          \.*\.erb$|
+          \.*\.h$|
+          \.*\.haml$|
+          \.*\.hs$|
+          \.*\.htm$|
+          \.*\.html$|
+          \.*\.java$|
+          \.*\.js$|
+          \.*\.l$|
+          \.*\.less$|
+          \.*\.man$|
+          \.*\.n$|
+          \.*\.objc$|
+          \.*\.p$|
+          \.*\.php$|
+          \.*\.pkb$|
+          \.*\.pkg$|
+          \.*\.pkh$|
+          \.*\.pks$|
+          \.*\.pl$|
+          \.*\.pm$|
+          \.*\.pod$|
+          \.*\.py$|
+          \.*\.rb$|
+          \.*\.rdf$|
+          \.*\.sass$|
+          \.*\.scss$|
+          \.*\.sh$|
+          \.*\.shtml$|
+          \.*\.sql$|
+          \.*\.ssl$|
+          \.*\.tex$|
+          \.*\.vim$|
+          \.*\.wsdl$|
+          \.*\.xml$|
+          \.*\.xsd$|
+          \.*\.zsh$/I cterm=none ctermfg=cyan ctermbg=default
+
+" Multimedia formats
+
+" Image
+highlight /.*\.JPG$|
+          \.*\.bmp$|
+          \.*\.cgm$|
+          \.*\.dl$|
+          \.*\.dvi$|
+          \.*\.emf$|
+          \.*\.eps$|
+          \.*\.gif$|
+          \.*\.jpeg$|
+          \.*\.jpg$|
+          \.*\.mng$|
+          \.*\.pbm$|
+          \.*\.pcx$|
+          \.*\.pgm$|
+          \.*\.png$|
+          \.*\.ppm$|
+          \.*\.pps$|
+          \.*\.ppsx$|
+          \.*\.ps$|
+          \.*\.svg$|
+          \.*\.svgz$|
+          \.*\.tga$|
+          \.*\.tif$|
+          \.*\.tiff$|
+          \.*\.xbm$|
+          \.*\.xcf$|
+          \.*\.xpm$|
+          \.*\.xwd$|
+          \.*\.yuv$/I cterm=none ctermfg=yellow ctermbg=default
+
+" Audio
+highlight /.*\.aac$|
+          \.*\.au$|
+          \.*\.flac$|
+          \.*\.mid$|
+          \.*\.midi$|
+          \.*\.mka$|
+          \.*\.mp3$|
+          \.*\.mpa$|
+          \.*\.mpeg$|
+          \.*\.mpg$|
+          \.*\.ogg$|
+          \.*\.ra$|
+          \.*\.wav$/I cterm=none ctermfg=yellow ctermbg=default
+
+" Video
+highlight /.*\.anx$|
+          \.*\.asf$|
+          \.*\.avi$|
+          \.*\.axv$|
+          \.*\.flc$|
+          \.*\.fli$|
+          \.*\.flv$|
+          \.*\.gl$|
+          \.*\.m2v$|
+          \.*\.m4v$|
+          \.*\.mkv$|
+          \.*\.mov$|
+          \.*\.mp4$|
+          \.*\.mp4v$|
+          \.*\.nuv$|
+          \.*\.ogm$|
+          \.*\.ogv$|
+          \.*\.ogx$|
+          \.*\.qt$|
+          \.*\.rm$|
+          \.*\.rmvb$|
+          \.*\.swf$|
+          \.*\.vob$|
+          \.*\.wmv$/I cterm=none ctermfg=yellow ctermbg=default
+
+" Binary document formats and multimedia source
+highlight /.*\.doc$|
+          \.*\.docx$|
+          \.*\.dot$|
+          \.*\.dotx$|
+          \.*\.fla$|
+          \.*\.pdf$|
+          \.*\.ppt$|
+          \.*\.pptx$|
+          \.*\.psd$|
+          \.*\.rtf$|
+          \.*\.xls$|
+          \.*\.xlsx$/I cterm=none ctermfg=green ctermbg=default
+
+" Archives, compressed
+highlight /.*\.7z$|
+          \.*\.Z$|
+          \.*\.apk$|
+          \.*\.arj$|
+          \.*\.bin$|
+          \.*\.bz$|
+          \.*\.bz2$|
+          \.*\.cab$|
+          \.*\.deb$|
+          \.*\.dmg$|
+          \.*\.ear$|
+          \.*\.gem$|
+          \.*\.gz$|
+          \.*\.iso$|
+          \.*\.jar$|
+          \.*\.msi$|
+          \.*\.rar$|
+          \.*\.rpm$|
+          \.*\.tar$|
+          \.*\.tbz$|
+          \.*\.tbz2$|
+          \.*\.tgz$|
+          \.*\.tx$|
+          \.*\.war$|
+          \.*\.xpi$|
+          \.*\.xz$|
+          \.*\.z$|
+          \.*\.zip$/I cterm=none ctermfg=magenta ctermbg=default
+
+" Encrypted files
+highlight /.*\.3des$|
+          \.*\.aes$|
+          \.*\.asc$|
+          \.*\.enc$|
+          \.*\.gpg$|
+          \.*\.pgp$/I cterm=none ctermfg=red ctermbg=default
+
+
+" Unimportant text files
+" highlight /^.*\.log$/      cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.*~$/       cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\*#$/        cterm=none     ctermfg=green     ctermbg=default
+
+" Unimportant non-text files
+" highlight /^.*\.bak$/      cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.BAK$/      cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.old$/      cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.OLD$/      cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.org_archive$/ cterm=none  ctermfg=green     ctermbg=default
+" highlight /^.*\.off$/      cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.OFF$/      cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.dist$/     cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.DIST$/     cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.orig$/     cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.ORIG$/     cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.swp$/      cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\.swo$/      cterm=none     ctermfg=green     ctermbg=default
+" highlight /^.*\*,v$/       cterm=none     ctermfg=green     ctermbg=default
+
