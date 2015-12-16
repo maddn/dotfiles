@@ -21,6 +21,7 @@ set vicmd=vim
 " This probably shouldn't be an option.
 
 set trash
+set trashdir=%r/.vifm-Trash,$HOME/.vifm/Trash
 
 " This is how many directories to store in the directory history.
 

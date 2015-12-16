@@ -3,6 +3,7 @@
 "Initialisation
 "------------------------------------------------------------------------------
 set t_Co=16
+set t_md=
 set background=dark
 
 hi clear
