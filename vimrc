@@ -61,6 +61,10 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+"Disable bell
+"------------
+set visualbell t_vb=
+
 
 "------------------------------------------------------------------------------
 "--GUI Options
@@ -68,8 +72,7 @@ set expandtab
 
 "Font
 "----
-set noantialias
-set guifont=Terminus\ (TTF):h12
+set guifont=Menlo:h12
 
 "Bars
 "----
@@ -129,6 +132,10 @@ cmap w!! w !sudo tee % > /dev/null
 nmap <Leader>cn :let @*=expand("%")<CR>
 nmap <Leader>cl :let @*=expand("%:p")<CR>
 
+"Cycle through buffers
+map <C-h> :bprevious<CR>
+map <C-l> :bnext<CR>
+
 
 "------------------------------------------------------------------------------
 "--Plugins
@@ -153,6 +160,7 @@ nnoremap <Leader>q :Bdelete<CR>
 "Vorax options
 "-------------
 let g:vorax_output_abort_key='F12'
+let g:vorax_folding_enable=0
 
 "Display NERDTree and Taglist if Vim is being opened without a file
 "------------------------------------------------------------------
@@ -177,8 +185,8 @@ autocmd QuickFixCmdPost l* nested botright lwindow
 
 "Set PL/SQL filetypes
 "--------------------
-autocmd BufNewFile,BufRead *.pkh,*.pkb,*.pls,*.pks set filetype=plsql | SQLSetType plsqlvorax
-autocmd BufNewFile,BufRead *.ddl,*.sqlpart,*.sql set filetype=sql
+autocmd BufNewFile,BufRead *.pkh,*.pkb,*.pls,*.pks set filetype=sql | SQLSetType plsqlvorax
+autocmd BufNewFile,BufRead *.ddl,*.sqlpart,*.sql,*.grt set filetype=sql | SQLSetType sqlvorax
 
 "PL/SQL options
 "--------------
@@ -200,6 +208,12 @@ autocmd FileType mail
 "XML auto reformat using xmllint
 "-------------------------------
 autocmd FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
+
+"Java / Maven filetypes
+"----------------------
+autocmd FileType java compiler mvn
+autocmd FileType pom compiler mvn
+autocmd FileType java no <F2> :make clean package -f ~/Work/Projects/vMS/vmsapi<CR>
 
 
 "------------------------------------------------------------------------------
@@ -292,3 +306,18 @@ autocmd VimEnter * let w:created=1
 autocmd WinEnter * if !exists('w:created') | let w:TrailingSpaceMatch=matchadd('TrailingSpace', '\s\+$') | call SetupWindow() | endif
 autocmd BufWinEnter * call SetupWindow()
 
+"Zoom / Restore window.
+"----------------------
+function! s:ZoomToggle() abort
+    if exists('t:zoomed') && t:zoomed
+        execute t:zoom_winrestcmd
+        let t:zoomed = 0
+    else
+        let t:zoom_winrestcmd = winrestcmd()
+        resize
+        vertical resize
+        let t:zoomed = 1
+    endif
+endfunction
+command! ZoomToggle call s:ZoomToggle()
+nnoremap <silent> <C-A> :ZoomToggle<CR>
