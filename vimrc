@@ -99,16 +99,20 @@ endif
 "Set the left side of the status line
 "------------------------------------
 set statusline=\ [Buf:\ %n]                                     "Buffer number
-set statusline+=\ %<%F                                          "File name and path
+set statusline+=\ %F%<                                          "File name and path
 set statusline+=\ [%{empty(&filetype)?'':&filetype.'\ \|\ '}    "File type
 set statusline+=\%{empty(&fileformat)?'':&fileformat.':'}       "File format
 set statusline+=%{&fenc!=''?&fenc:&enc}]                        "File encoding
 set statusline+=\ [%{&l:expandtab?'Spaces':'Tabs'}]             "Tabs / Spaces
 set statusline+=\ %h%w%m%r                                      "Help / Preview / Modified / Readonly
+set statusline+=\%{fugitive#statusline()}                       "Fugutive plugin
 
 "Set the right side of the status line
 "-------------------------------------
-set statusline+=%=[0x%B]\ [Line:\ %l/%L\ \|\ Col:\ %c%V]\ (%P)
+set statusline+=%=\ %#warningmsg#                               "Synastic plugin
+set statusline+=%{SyntasticStatuslineFlag()}                    "Syntasic plugin
+set statusline+=%*                                              "Syntasic plugin
+set statusline+=\ %=[0x%B]\ [Line:\ %l/%L\ \|\ Col:\ %c%V]\ (%P)
 
 
 "------------------------------------------------------------------------------
@@ -146,12 +150,16 @@ map <C-l> :bnext<CR>
 nmap <Leader>nt :NERDTreeToggle<CR>
 let g:NERDTreeShowBookmarks=1
 
+"Tagbar options
+"--------------
+nmap <Leader>fl :TagbarToggle<CR>
+
 "TagList options
 "---------------
-nmap <Leader>fl :TlistToggle<CR>
-let g:Tlist_Use_Right_Window=1
-let g:Tlist_Show_One_File=1
-let g:Tlist_Enable_Fold_Column=0
+"nmap <Leader>fl :TlistToggle<CR>
+"let g:Tlist_Use_Right_Window=1
+"let g:Tlist_Show_One_File=1
+"let g:Tlist_Enable_Fold_Column=0
 
 "Bbye options
 "-----------------------
@@ -170,9 +178,30 @@ if bufname('%') == ''
     autocmd VimEnter * wincmd p
 
     "Open TagList
-    autocmd VimEnter * TlistToggle | exe bufwinnr('__Tag_List__') . 'wincmd w' | setlocal statusline=%f | wincmd p
+    "autocmd VimEnter * TlistToggle | exe bufwinnr('__Tag_List__') . 'wincmd w' | setlocal statusline=%f | wincmd p
+    "autocmd VimEnter * TagbarToggle
 endif
 
+"Synastic options
+"----------------
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_java_javac_config_file_enabled = 1
+let g:syntastic_java_checkstyle_classpath = '~/.vim/checkstyle-8.1-all.jar'
+let g:syntastic_java_checkstyle_conf_file = '~/.vim/sun_checks.xml'
+let g:syntastic_java_checkers = ["javac"]
+
+"Airline
+"-------
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='maddersAl'
+
+"YouCompleteMe
+"-------------
+nnoremap <leader>jd :YcmCompleter GoTo<CR>
 
 "------------------------------------------------------------------------------
 "Auto commands
