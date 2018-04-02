@@ -1,0 +1,9 @@
+[user]
+	email = michael.maddern@gmail.com
+	name = Michael Maddern
+[http]
+	sslVerify = false
+[diff]
+	tool = gvimdiff
+[difftool]
+	prompt = false
