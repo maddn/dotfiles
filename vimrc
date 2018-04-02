@@ -65,6 +65,10 @@ set expandtab
 "------------
 set visualbell t_vb=
 
+"Files
+"-----
+set viminfo+=n~/.vim/viminfo
+
 
 "------------------------------------------------------------------------------
 "--GUI Options
@@ -154,13 +158,6 @@ let g:NERDTreeShowBookmarks=1
 "--------------
 nmap <Leader>fl :TagbarToggle<CR>
 
-"TagList options
-"---------------
-"nmap <Leader>fl :TlistToggle<CR>
-"let g:Tlist_Use_Right_Window=1
-"let g:Tlist_Show_One_File=1
-"let g:Tlist_Enable_Fold_Column=0
-
 "Bbye options
 "-----------------------
 nnoremap <Leader>q :Bdelete<CR>
@@ -190,9 +187,9 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_java_javac_config_file_enabled = 1
-let g:syntastic_java_checkstyle_classpath = '~/.vim/checkstyle-8.1-all.jar'
-let g:syntastic_java_checkstyle_conf_file = '~/.vim/sun_checks.xml'
 let g:syntastic_java_checkers = ["javac"]
+let g:syntastic_javascript_checkers = ["closurecompiler"]
+let g:syntastic_javascript_closurecompiler_script = "closure-compiler"
 
 "Airline
 "-------
@@ -202,9 +199,11 @@ let g:airline_theme='maddersAl'
 "YouCompleteMe
 "-------------
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
+let g:ycm_always_populate_location_list = 0
+
 
 "------------------------------------------------------------------------------
-"Auto commands
+"--Auto commands
 "------------------------------------------------------------------------------
 
 "Automatically open the quickfix window on :make (using the full width)
@@ -238,11 +237,13 @@ autocmd FileType mail
 "-------------------------------
 autocmd FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 
-"Java / Maven filetypes
-"----------------------
-autocmd FileType java compiler mvn
+"Maven filetypes
+"---------------
 autocmd FileType pom compiler mvn
-autocmd FileType java no <F2> :make clean package -f ~/Work/Projects/vMS/vmsapi<CR>
+
+"Java Make errorformat output as Ant
+"-----------------------------------
+autocmd FileType java set errorformat=\ %#[javac]\ %#%f:%l:%c:%*\\d:%*\\d:\ %t%[%^:]%#:%m,\%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%#
 
 
 "------------------------------------------------------------------------------
@@ -335,6 +336,11 @@ autocmd VimEnter * let w:created=1
 autocmd WinEnter * if !exists('w:created') | let w:TrailingSpaceMatch=matchadd('TrailingSpace', '\s\+$') | call SetupWindow() | endif
 autocmd BufWinEnter * call SetupWindow()
 
+
+"------------------------------------------------------------------------------
+"--Useful functions
+"------------------------------------------------------------------------------
+
 "Zoom / Restore window.
 "----------------------
 function! s:ZoomToggle() abort
@@ -350,3 +356,21 @@ function! s:ZoomToggle() abort
 endfunction
 command! ZoomToggle call s:ZoomToggle()
 nnoremap <silent> <C-A> :ZoomToggle<CR>
+
+"Make with Makefile in a parent directory
+"----------------------------------------
+function! SetMkfile()
+  let filemk = "Makefile"
+  let pathmk = "./"
+  let depth = 1
+  while depth < 8
+    if filereadable(pathmk . filemk)
+      return pathmk
+    endif
+    let depth += 1
+    let pathmk = "../" . pathmk
+  endwhile
+  return "."
+endf
+command! -nargs=* Make let $mkpath = SetMkfile() | make <args> -C $mkpath
+
