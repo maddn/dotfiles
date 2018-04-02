@@ -1,11 +1,6 @@
-export ORACLE_HOME=/opt/oracle/instantclient_11_2
-export PATH=/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:$ORACLE_HOME:$PATH:/opt/android-sdk-macosx/platform-tools
-export CLASSPATH=$CLASSPATH:$ORACLE_HOME
+export PATH=/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:$PATH
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
-export DYLD_LIBRARY_PATH=$ORACLE_HOME:$DYLD_LIBRARY_PATH
-export TNS_ADMIN=$ORACLE_HOME/network/admin
 export EDITOR=/usr/local/bin/vim
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home
 
 export LESSOPEN="| source-highlight --out-format esc --style-file ~/.source-highlight/madders.style --failsafe -i \"%s\""
 export LESS=-R
@@ -32,5 +27,7 @@ set -o vi
 
 eval $(dircolors ~/.dir_colors)
 
-. ~/nso/nso-4.0.2/ncsrc
+. ~/nso/nso-4.6/ncsrc
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
 
