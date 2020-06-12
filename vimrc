@@ -1,13 +1,14 @@
 execute pathogen#infect()
 
 set nocompatible
+set shell=/bin/bash
 
 "------------------------------------------------------------------------------
 "--Comands
 "------------------------------------------------------------------------------
 filetype plugin on
 syntax enable
-colorscheme madders
+colorscheme maddn
 
 
 "------------------------------------------------------------------------------
@@ -54,11 +55,12 @@ set ruler
 "------------
 set completeopt+=longest
 set showmatch
+set nojoinspaces
 
 "Tabs and identing
 "-----------------
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set expandtab
 
 "Disable bell
@@ -144,6 +146,17 @@ nmap <Leader>cl :let @*=expand("%:p")<CR>
 map <C-h> :bprevious<CR>
 map <C-l> :bnext<CR>
 
+"Esc key
+inoremap jj <esc>
+inoremap jk <esc>
+
+"Quit all on ZZ
+nmap ZZ :qa<CR>
+
+"Move through display lines
+nnoremap j gj
+nnoremap k gk
+
 
 "------------------------------------------------------------------------------
 "--Plugins
@@ -188,13 +201,24 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_java_javac_config_file_enabled = 1
 let g:syntastic_java_checkers = ["javac"]
-let g:syntastic_javascript_checkers = ["closurecompiler"]
+let g:syntastic_javascript_eslint_generic=1
+let g:syntastic_javascript_eslint_exe="eval (npm bin)/eslint"
+let g:syntastic_javascript_eslint_exec="/bin/ls"
+let g:syntastic_javascript_eslint_args='-f compact'
+let g:syntastic_javascript_checkers = ["eslint"]
 let g:syntastic_javascript_closurecompiler_script = "closure-compiler"
+let g:syntastic_python_checkers = ["pylint"]
+let g:syntastic_yang_pyang_exe = "/usr/local/bin/pyang"
+let g:syntastic_yang_pyang_args = "--path=$NCS_DIR/src/ncs/yang --canonical"
+
+"JSX
+"---
+let g:jsx_ext_required = 0
 
 "Airline
 "-------
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme='maddersAl'
+let g:airline_theme="maddn"
 
 "YouCompleteMe
 "-------------
@@ -235,7 +259,7 @@ autocmd FileType mail
 
 "XML auto reformat using xmllint
 "-------------------------------
-autocmd FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
+"autocmd FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 
 "Maven filetypes
 "---------------
@@ -244,6 +268,18 @@ autocmd FileType pom compiler mvn
 "Java Make errorformat output as Ant
 "-----------------------------------
 autocmd FileType java set errorformat=\ %#[javac]\ %#%f:%l:%c:%*\\d:%*\\d:\ %t%[%^:]%#:%m,\%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%#
+
+"Markdown filetypes
+"------------------
+autocmd FileType markdown
+\   setlocal textwidth=79 |
+\   setlocal formatoptions-=l |
+\   setlocal spell spelllang=en_gb |
+\   setlocal autoindent
+
+"Large files
+"-----------
+autocmd BufReadPre * if getfsize(expand("<afile>")) > 1024*1024 | let b:syntastic_mode="passive" | endif
 
 
 "------------------------------------------------------------------------------
@@ -290,7 +326,7 @@ function! HighlightSpaces()
         let w:MixedSpaceMatch=matchadd('MixedSpaces', '^ \{2,}\|\t\zs \+\| \+\ze\t')
     endif
     if !exists('w:SubtleSpaceMatch')
-        let   w:SubtleSpaceMatch=matchadd('SubtleSpaces', '\.\@<! \{2,}', 1)
+        let w:SubtleSpaceMatch=matchadd('SubtleSpaces', '\.\@<! \{2,}', 1)
     endif
 endfunction
 

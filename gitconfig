@@ -7,3 +7,8 @@
 	tool = gvimdiff
 [difftool]
 	prompt = false
+[merge]
+	tool = gvimdiff
+	conflictstyle = diff3
+[mergetool]
+	prompt = false

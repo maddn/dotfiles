@@ -2,7 +2,7 @@ export PATH=/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:$PATH
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:$MANPATH
 export EDITOR=/usr/local/bin/vim
 
-export LESSOPEN="| source-highlight --out-format esc --style-file ~/.source-highlight/madders.style --failsafe -i \"%s\""
+export LESSOPEN="| source-highlight --out-format esc --style-file ~/.source-highlight/maddn.style --failsafe -i \"%s\""
 export LESS=-R
 
 alias more='more --no-lessopen'
@@ -26,8 +26,6 @@ alias ls='ls --color=auto'
 set -o vi
 
 eval $(dircolors ~/.dir_colors)
-
-. ~/nso/nso-4.6/ncsrc
 
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
 

@@ -21,7 +21,7 @@ set vicmd=vim
 " This probably shouldn't be an option.
 
 set trash
-set trashdir=%r/.vifm-Trash,$HOME/.vifm/Trash
+set trashdir=%r/.vifm-Trash,$VIFM/Trash,%r/.vifm-Trash
 
 " This is how many directories to store in the directory history.
 
@@ -60,7 +60,7 @@ set noiec
 
 " Selected color scheme
 
-colorscheme madders.vifm
+colorscheme maddn.vifm
 
 " The FUSE_HOME directory will be used as a root dir for all FUSE mounts.
 " Unless it exists with write/exec permissions set, vifm will attempt to
@@ -264,7 +264,7 @@ filextype */
         \ Thunar %f &,
 fileview .*/,*/ tree %f
 
-fileview * source-highlight --input "%f" --output STDOUT --out-format esc --style-file ~/.source-highlight/madders.style --failsafe
+fileview * source-highlight --input "%f" --output STDOUT --out-format esc --style-file ~/.source-highlight/maddn.style --failsafe
 
 " Open all other files with default system programs (you can also remove all
 " :file[x]type commands above to ensure they don't interfere with system-wide

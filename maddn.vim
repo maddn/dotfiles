@@ -11,7 +11,7 @@ if exists("syntax_on")
     syntax reset
 endif
 
-let g:colors_name = "madders"
+let g:colors_name = "maddn"
 
 "Colours
 "------------------------------------------------------------------------------
@@ -116,6 +116,8 @@ if has("gui_running")
     hi          Directory       guifg=#6b8299
     hi          Search          guifg=#333333       guibg=#998a6b
     hi          Title           guifg=#896a99
+
+    hi          XmlTag          guifg=#896a99
 else
     hi          Comment         ctermfg=Cyan
     hi          Constant        ctermfg=DarkRed
@@ -147,6 +149,8 @@ else
     hi          Directory       ctermfg=Blue
     hi          Search          ctermfg=DarkGrey    ctermbg=Yellow
     hi          Title           ctermfg=Magenta
+
+    hi          XmlTag          ctermfg=Magenta
 endif
 
 hi! link    Character       String
@@ -176,6 +180,9 @@ hi! link    IncSearch       Search
 hi! link    SpecialKey      String
 hi! link    MoreMsg         String
 
+hi! link    XmlTagName      XmlTag
+hi! link    XmlEndTag       XmlTag
+hi! link    xmlAttrib       Identifier
 
 "   hi! ModeMsg
 "   hi! VisualNOS
