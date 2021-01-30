@@ -4,11 +4,11 @@
 [http]
 	sslVerify = false
 [diff]
-	tool = gvimdiff
+	tool = vimdiff
 [difftool]
 	prompt = false
 [merge]
-	tool = gvimdiff
+	tool = vimdiff
 	conflictstyle = diff3
 [mergetool]
 	prompt = false

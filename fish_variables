@@ -1,5 +1,19 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR --export CLICOLOR:1
+SETUVAR --export LESS:\x2dR
+SETUVAR --export LESSOPEN:\x7c\x20pygmentize\x20\x2df\x20\x7e/\x2econfig/pygments/maddn\x2epy\x20\x2dx\x20\x2dg\x20\x25s
+SETUVAR --export LESS_TERMCAP_mb:\x1b\x5b31m
+SETUVAR --export LESS_TERMCAP_md:\x1b\x5b34m
+SETUVAR --export LESS_TERMCAP_se:\x1b\x5b30m\x1b\x5bm\x0f
+SETUVAR --export LESS_TERMCAP_so:\x1b\x5b90m\x1b\x5b43m
+SETUVAR --export LESS_TERMCAP_ue:\x1b\x5b30m\x1b\x5bm\x0f
+SETUVAR --export LESS_TERMCAP_us:\x1b\x5b32m
+SETUVAR --export LSCOLORS:ExGxFxdaCxDaDahbadachc
+SETUVAR --export TERM:alacritty
+SETUVAR __fish_init_2_39_8:\x1d
+SETUVAR __fish_init_2_3_0:\x1d
+SETUVAR __fish_init_3_x:\x1d
 SETUVAR __fish_initialized:3100
 SETUVAR fish_color_autosuggestion:555\x1ebrblack
 SETUVAR fish_color_cancel:\x2dr
@@ -30,3 +44,4 @@ SETUVAR fish_pager_color_completion:\x1d
 SETUVAR fish_pager_color_description:B3A06D\x1eyellow
 SETUVAR fish_pager_color_prefix:white\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
+SETUVAR fish_user_paths:/home/mmaddern/\x2elocal/bin

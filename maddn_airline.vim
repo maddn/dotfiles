@@ -1,103 +1,75 @@
 scriptencoding utf-8
 
-" Each theme is contained in its own file and declares variables scoped to the
-" file.  These variables represent the possible "modes" that airline can
-" detect.  The mode is the return value of mode(), which gets converted to a
-" readable string.  The following is a list currently supported modes: normal,
-" insert, replace, visual, and inactive.
-"
-" Each mode can also have overrides.  These are small changes to the mode that
-" don't require a completely different look.  "modified" and "paste" are two
-" such supported overrides.  These are simply suffixed to the major mode,
-" separated by an underscore.  For example, "normal_modified" would be normal
-" mode where the current buffer is modified.
-"
-" The theming algorithm is a 2-pass system where the mode will draw over all
-" parts of the statusline, and then the override is applied after.  This means
-" it is possible to specify a subset of the theme in overrides, as it will
-" simply overwrite the previous colors.  If you want simultaneous overrides,
-" then they will need to change different parts of the statusline so they do
-" not conflict with each other.
-"
-" First, let's define an empty dictionary and assign it to the "palette"
-" variable. The # is a separator that maps with the directory structure. If
-" you get this wrong, Vim will complain loudly.
-let g:airline#themes#maddn_airline#palette = {}
+let s:Black =       [ 0,  '#000000' ]
+let s:DarkRed =     [ 1,  '#805959' ]
+let s:DarkGreen =   [ 2,  '#598059' ]
+let s:DarkYellow =  [ 3,  '#807359' ]
+let s:DarkBlue =    [ 4,  '#596D80' ]
+let s:DarkMagenta = [ 5,  '#735980' ]
+let s:DarkCyan =    [ 6,  '#598079' ]
+let s:Grey =        [ 7,  '#999999' ]
 
-" First let's define some arrays. The s: is just a VimL thing for scoping the
-" variables to the current script. Without this, these variables would be
-" declared globally. Now let's declare some colors for normal mode and add it
-" to the dictionary.  The array is in the format:
-" [ guifg, guibg, ctermfg, ctermbg, opts ]. See "help attr-list" for valid
-" values for the "opt" value.
-let s:N1   = [ '#333333' , '#998a6b' , 8  , 3 ]
-let s:N2   = [ '#b3b3b3' , '#444444' , 15 , 238 ]
-let s:N3   = [ '#6b9991' , '#202020' , 14  , 234 ]
-let g:airline#themes#maddn_airline#palette.normal = airline#themes#generate_color_map(s:N1, s:N2, s:N3)
+let s:DarkGrey =    [ 8,  '#333333' ]
+let s:Red =         [ 9,  '#994D4D' ]
+let s:Green =       [ 10, '#6B996B' ]
+let s:Yellow =      [ 11, '#998A6B' ]
+let s:Blue =        [ 12, '#6B8299' ]
+let s:Magenta =     [ 13, '#896A99' ]
+let s:Cyan =        [ 14, '#6B9991' ]
+let s:White =       [ 15, '#B3B3B3' ]
 
-" Here we define overrides for when the buffer is modified.  This will be
-" applied after g:airline#themes#maddn_airline#palette.normal, hence why only certain keys are
-" declared.
-let g:airline#themes#maddn_airline#palette.normal_modified = {
-      \ 'airline_c': [ '#b3b3b3' , '#735980' , 15     , 5      , ''     ] ,
-      \ }
+function! s:ColorArray(colorfg, colorbg)
+  return [ a:colorfg[1], a:colorbg[1], a:colorfg[0], a:colorbg[0] ]
+endfunction
 
+function! s:AddWarnAndError(color_map)
+  let a:color_map.airline_warning = s:ColorArray( s:DarkGrey, s:Grey  )
+  let a:color_map.airline_error   = s:ColorArray( s:DarkGrey, s:Red   )
+endfunction
 
-let s:I1 = [ '#333333' , '#6b9991' , 8  , 14  ]
-let s:I2 = [ '#b3b3b3' , '#596D80' , 15 , 4  ]
-let s:I3 = [ '#b3b3b3' , '#444444' , 15 , 238  ]
-let g:airline#themes#maddn_airline#palette.insert = airline#themes#generate_color_map(s:I1, s:I2, s:I3)
-let g:airline#themes#maddn_airline#palette.insert_modified = {
-      \ 'airline_c': [ '#b3b3b3' , '#896a99' , 15     , 5      , ''     ] ,
-      \ }
-let g:airline#themes#maddn_airline#palette.insert_paste = {
-      \ 'airline_a': [ s:I1[0]   , '#d78700' , s:I1[2] , 172     , ''     ] ,
-      \ }
+function! s:ColorMap(az, by, cx)
+  let color_map = airline#themes#generate_color_map(a:az, a:by, a:cx)
+  call s:AddWarnAndError(color_map)
+  return color_map
+endfunction
 
+function! s:ColorMapOverride(section, color_array)
+  let color_map = { a:section: a:color_array }
+  call s:AddWarnAndError(color_map)
+  return color_map
+endfunction
 
-let g:airline#themes#maddn_airline#palette.replace = copy(g:airline#themes#maddn_airline#palette.insert)
-let g:airline#themes#maddn_airline#palette.replace.airline_a = [ s:I2[0]   , '#af0000' , s:I2[2] , 124     , ''     ]
-let g:airline#themes#maddn_airline#palette.replace_modified = g:airline#themes#maddn_airline#palette.insert_modified
+let s:N1        = s:ColorArray( s:DarkGrey,     s:DarkYellow  )
+let s:N2        = s:ColorArray( s:Grey,         s:DarkGrey    )
+let s:N3        = s:ColorArray( s:DarkCyan,     s:Black       )
 
+let s:I1        = s:ColorArray( s:DarkGrey,     s:Cyan        )
+let s:I2        = s:ColorArray( s:DarkGrey,     s:DarkBlue    )
+let s:I3        = s:N3
 
-let s:V1 = [ '#333333' , '#998a6b' , 8 , 3]
-let s:V2 = [ '#333333' , '#994d4d' , 8 , 9 ]
-let s:V3 = [ '#b3b3b3' , '#805959' , 15  , 1  ]
-let g:airline#themes#maddn_airline#palette.visual = airline#themes#generate_color_map(s:V1, s:V2, s:V3)
-let g:airline#themes#maddn_airline#palette.visual_modified = {
-      \ 'airline_c': [ '#b3b3b3' , '#735980' , 255     , 5      , ''     ] ,
-      \ }
+let s:V1        = s:ColorArray( s:DarkGrey,     s:Magenta     )
+let s:V2        = s:N2
+let s:V3        = s:N3
 
+let s:IA1       = s:ColorArray( s:Black,        s:DarkGrey    )
+let s:IA2       = s:ColorArray( s:DarkGrey,     s:Black       )
+let s:IA3       = s:ColorArray( s:Black,        s:DarkGrey    )
 
-let s:IA1 = [ '#666666' , '#1c1c1c' , 241 , 234 , '' ]
-let s:IA2 = [ '#666666' , '#262626' , 241 , 235 , '' ]
-let s:IA3 = [ '#666666' , '#303030' , 241 , 236 , '' ]
-let g:airline#themes#maddn_airline#palette.inactive = airline#themes#generate_color_map(s:IA1, s:IA2, s:IA3)
-let g:airline#themes#maddn_airline#palette.inactive_modified = {
-      \ 'airline_c': [ '#896A99' , '' , 13 , '' , '' ] ,
-      \ }
+let s:Mod       = s:ColorArray( s:DarkGrey,     s:DarkRed     )
+let s:IAMod     = s:ColorArray( s:DarkGrey,     s:Grey        )
 
+let s:ModMap    = s:ColorMapOverride( 'airline_c', s:Mod )
 
-" Accents are used to give parts within a section a slightly different look or
-" color. Here we are defining a "red" accent, which is used by the 'readonly'
-" part by default. Only the foreground colors are specified, so the background
-" colors are automatically extracted from the underlying section colors. What
-" this means is that regardless of which section the part is defined in, it
-" will be red instead of the section's foreground color. You can also have
-" multiple parts with accents within a section.
-let g:airline#themes#maddn_airline#palette.accents = {
-      \ 'red': [ '#994d4d' , '' , 9 , ''  ]
-      \ }
-
-
-" Here we define the color map for ctrlp.  We check for the g:loaded_ctrlp
-" variable so that related functionality is loaded iff the user is using
-" ctrlp. Note that this is optional, and if you do not define ctrlp colors
-" they will be chosen automatically from the existing palette.
-if get(g:, 'loaded_ctrlp', 0)
-  let g:airline#themes#maddn_airline#palette.ctrlp = airline#extensions#ctrlp#generate_color_map(
-        \ [ '#d7d7ff' , '#5f00af' , 189 , 55  , ''     ],
-        \ [ '#ffffff' , '#875fd7' , 231 , 98  , ''     ],
-        \ [ '#5f00af' , '#ffffff' , 55  , 231 , 'bold' ])
-endif
-
+let g:airline#themes#maddn_airline#palette = {
+  \   'normal':             s:ColorMap( s:N1,   s:N2,   s:N3),
+  \   'insert':             s:ColorMap( s:I1,   s:I2,   s:I3),
+  \   'replace':            s:ColorMap( s:I1,   s:I2,   s:I3),
+  \   'visual':             s:ColorMap( s:V1,   s:V2,   s:V3),
+  \   'inactive':           s:ColorMap( s:IA1,  s:IA2,  s:IA3),
+  \   'normal_modified':    s:ModMap,
+  \   'insert_modified':    s:ModMap,
+  \   'replace_modified':   s:ModMap,
+  \   'visual_modified':    s:ModMap,
+  \   'inactive_modified':  s:ColorMapOverride( 'airline_c', s:IAMod ),
+  \   'accents':            { 'red':  [ s:Red[1], '', s:Red[0], '' ] }
+  \ }

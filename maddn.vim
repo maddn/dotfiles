@@ -1,193 +1,128 @@
-"File format based on solarized.vim
-"
-"Initialisation
-"------------------------------------------------------------------------------
-set t_Co=16
-set t_md=
-set background=dark
-
-hi clear
 if exists("syntax_on")
     syntax reset
 endif
 
 let g:colors_name = "maddn"
 
-"Colours
-"------------------------------------------------------------------------------
-"   Black          #000000
-"   Dark Red       #805959
-"   Dark Green     #598059
-"   Dark Yellow    #807359
-"   Dark Blue      #596D80
-"   Dark Magenta   #735980
-"   Dark Cyan      #598079
-"   Grey           #999999
+let s:Black =       [ 0,  '#000000' ]
+let s:DarkRed =     [ 1,  '#805959' ]
+let s:DarkGreen =   [ 2,  '#598059' ]
+let s:DarkYellow =  [ 3,  '#807359' ]
+let s:DarkBlue =    [ 4,  '#596D80' ]
+let s:DarkMagenta = [ 5,  '#735980' ]
+let s:DarkCyan =    [ 6,  '#598079' ]
+let s:Grey =        [ 7,  '#999999' ]
 
-"   Dark Grey      #333333
-"   Red            #994d4d
-"   Green          #6b996b
-"   Yellow         #998a6b
-"   Blue           #6b8299
-"   Magenta        #896a99
-"   Cyan           #6b9991
-"   White          #b3b3b3
+let s:DarkGrey =    [ 8,  '#333333' ]
+let s:Red =         [ 9,  '#994D4D' ]
+let s:Green =       [ 10, '#6B996B' ]
+let s:Yellow =      [ 11, '#998A6B' ]
+let s:Blue =        [ 12, '#6B8299' ]
+let s:Magenta =     [ 13, '#896A99' ]
+let s:Cyan =        [ 14, '#6B9991' ]
+let s:White =       [ 15, '#B3B3B3' ]
 
-"Basic highlighting
-"------------------------------------------------------------------------------
-"
-"   Comment         any comment
-"
-"   Constant        any constant
-"   Number          a number constant: 234, 0xff
-"   Boolean         a boolean constant: TRUE, false
-"   Float           a floating point constant: 2.3e10
-"
-"   String          a string constant: "this is a string"
-"   Character       a character constant: 'c', '\n'
-"
-"   Identifier      any variable name
-"   Function        function name (also: methods for classes)
-"
-"   Statement       any statement
-"   Conditional     if, then, else, endif, switch, etc.
-"   Repeat          for, do, while, etc.
-"   Label           case, default, etc.
-"   Keyword         any other keyword
-"   Exception       try, catch, throw
-"
-"   Operator        "sizeof", "+", "*", etc.
-"
-"   PreProc         generic Preprocessor
-"   Include         preprocessor #include
-"   Define          preprocessor #define
-"   Macro           same as Define
-"   PreCondit       preprocessor #if, #else, #endif, etc.
-"
-"   Type            int, long, char, etc.
-"   StorageClass    static, register, volatile, etc.
-"   Structure       struct, union, enum, etc.
-"   Typedef         A typedef
-"
-"   Special         any special symbol
-"   SpecialChar     special character in a constant
-"   Tag             you can use CTRL-] on this
-"   Delimiter       character that needs attention
-"   SpecialComment  special things inside a comment
-"   Debug           debugging statements
-"
-"   Ignore          left blank, hidden  |hl-Ignore|
-"
-"   Error           any erroneous construct
-"
-"   Todo            anything that needs extra attention; mostly the
-"                    keywords TODO FIXME and XXX
+let s:None =        'none'
 
-if has("gui_running")
-    hi          Normal          guifg=#b3b3b3       guibg=#141414
-    hi          Comment         guifg=#6b9991
-    hi          Constant        guifg=#805959
-    hi          String          guifg=#998a6b
-    hi          Identifier      guifg=#6b996b
-    hi          Statement       guifg=#6b8299
-    hi          Operator        guifg=#805959
-    hi          PreProc         guifg=#896a99
-    hi          Type            guifg=#6b996b
-    hi          Special         guifg=#805959
-    hi          Ignore          guifg=#994d4d
-    hi          Error           guifg=#994d4d       guibg=#000000       gui=underline
-    hi          Todo            guifg=#807359       guibg=#000000       gui=underline
 
-    hi          StatusLine      guifg=#998a6b       guibg=#333333       gui=none
-    hi          StatusLineNC    guifg=#999999       guibg=#333333       gui=none
-    hi          VertSplit       guifg=#999999       guibg=NONE          gui=none
-    hi          LineNr          guifg=#333333
-    hi          ColorColumn     guibg=#805959
-    hi          Visual          guibg=#333333
-    hi          Cursor          guibg=#998a6b
-    hi          CursorLine      guibg=#000000       gui=none
-    hi          CursorLineNr    guifg=#807359       guibg=#000000
+function! s:Highlight(group, colorfg, ...)
+  execute 'highlight clear ' . a:group
+  let highlight_command = 'highlight! ' . a:group
+  if len(a:colorfg) == 2
+    let highlight_command .= ' ctermfg=' . a:colorfg[0] .
+                          \  ' guifg=' . a:colorfg[1]
+  endif
+  if a:0 > 0 && len(a:1) == 2
+    let highlight_command .= ' ctermbg=' . a:1[0] . ' guibg=' . a:1[1]
+  endif
+  if a:0 == 2
+    let highlight_command .= ' cterm=' . a:2 . ' gui=' . a:2
+  endif
+  execute highlight_command
+endfunction
 
-    hi          DiffAdd         guifg=#b3b3b3       guibg=#807359
-    hi          DiffChange      guifg=#333333       guibg=#596D80
-    hi          DiffDelete      guifg=#999999       guibg=#805959
-    hi          DiffText        guifg=#b3b3b3       guibg=#596D80
+function! s:HighlightLink(from, to)
+  execute 'highlight clear ' . a:from
+  execute 'highlight link ' . a:from . ' ' . a:to
+endfunction
 
-    hi          Directory       guifg=#6b8299
-    hi          Search          guifg=#333333       guibg=#998a6b
-    hi          Title           guifg=#896a99
 
-    hi          XmlTag          guifg=#896a99
-else
-    hi          Comment         ctermfg=Cyan
-    hi          Constant        ctermfg=DarkRed
-    hi          String          ctermfg=Yellow
-    hi          Identifier      ctermfg=Green
-    hi          Statement       ctermfg=Blue
-    hi          Operator        ctermfg=DarkRed
-    hi          PreProc         ctermfg=Magenta
-    hi          Type            ctermfg=Green
-    hi          Special         ctermfg=DarkRed
-    hi          Ignore          ctermfg=Red
-    hi          Error           ctermfg=Red         ctermbg=Black       cterm=Underline
-    hi          Todo            ctermfg=Brown       ctermbg=Black       cterm=Underline
+call s:Highlight('Normal',            s:White                         )
+call s:Highlight('Comment',           s:Cyan                          )
+call s:Highlight('Constant',          s:DarkRed                       )
+call s:Highlight('String',            s:Yellow                        )
+call s:Highlight('Identifier',        s:Green                         )
+call s:Highlight('Statement',         s:Blue                          )
+call s:Highlight('Operator',          s:DarkRed                       )
+call s:Highlight('PreProc',           s:Magenta                       )
+call s:Highlight('Type',              s:Green                         )
+call s:Highlight('Special',           s:DarkRed                       )
+call s:Highlight('Ignore',            s:Red                           )
+call s:Highlight('Underlined',        s:Red                           )
+call s:Highlight('Error',             s:DarkGrey,     s:DarkRed       )
+call s:Highlight('Todo',              s:DarkGrey,     s:DarkYellow    )
 
-    hi          StatusLine      ctermfg=Yellow      ctermbg=DarkGrey    cterm=None
-    hi          StatusLineNC    ctermfg=Grey        ctermbg=DarkGrey    cterm=None
-    hi          VertSplit       ctermfg=Grey        ctermbg=NONE        cterm=None
-    hi          LineNr          ctermfg=DarkGrey
-    hi          ColorColumn     ctermbg=DarkRed
-    hi          Visual          ctermbg=DarkGrey
-    hi          Cursor          ctermbg=Yellow
-    hi          CursorLine      ctermbg=Black       cterm=None
+call s:Highlight('XmlTag',            s:Magenta                       )
+call s:Highlight('Directory',         s:Blue                          )
 
-    hi          DiffAdd         ctermfg=White       ctermbg=Brown
-    hi          DiffChange      ctermfg=DarkGrey    ctermbg=DarkBlue
-    hi          DiffDelete      ctermfg=Grey        ctermbg=DarkRed
-    hi          DiffText        ctermfg=White       ctermbg=DarkBlue
+call s:Highlight('StatusLine',        s:Yellow,       s:DarkGrey      )
+call s:Highlight('StatusLineNC',      s:Grey,         s:DarkGrey      )
 
-    hi          Directory       ctermfg=Blue
-    hi          Search          ctermfg=DarkGrey    ctermbg=Yellow
-    hi          Title           ctermfg=Magenta
+call s:Highlight('VertSplit',         s:Grey,         []              )
+call s:Highlight('ColorColumn',       s:Black,        s:DarkRed       )
+call s:Highlight('LineNr',            s:DarkGrey                      )
 
-    hi          XmlTag          ctermfg=Magenta
-endif
+call s:Highlight('Visual',            [],             s:DarkGrey      )
+call s:Highlight('CursorColumn',      [],             s:Black,        )
+call s:Highlight('CursorLine',        [],             s:Black,        )
+call s:Highlight('CursorLineNr',      s:Yellow,       s:Black         )
 
-hi! link    Character       String
-hi! link    NonText         Statement
+call s:Highlight('DiffAdd',           s:White,        s:DarkGreen     )
+call s:Highlight('DiffDelete',        s:Grey,         s:DarkRed       )
+call s:Highlight('DiffChange',        s:DarkGrey,     s:DarkBlue      )
+call s:Highlight('DiffText',          s:White,        s:DarkBlue      )
 
-hi! link    SpellBad        Error
-hi! link    SpellCap        Todo
-hi! link    SpellRare       Todo
-hi! link    SpellLocal      Todo
+call s:Highlight('Search',            s:DarkGrey,     s:Yellow        )
+call s:Highlight('WildMenu',          s:DarkGrey,     s:DarkYellow    )
 
-hi! link    Pmenu           StatusLine
-hi! link    PmenuSel        DiffAdd
-hi! link    PmenuSbar       StatusLineNC
-hi! link    PmenuThumb      StatusLine
+call s:Highlight('ErrorMsg',          s:DarkRed                       )
+call s:Highlight('WarningMsg',        s:DarkYellow                    )
 
-hi! link    WarningMsg      Ignore
-hi! link    ErrorMsg        Ignore
+call s:Highlight('GitGutterAdd',      s:Green                         )
+call s:Highlight('GitGutterChange',   s:Yellow                        )
+call s:Highlight('GitGutterDelete',   s:Red                           )
 
-hi! link    Folded          StatusLine
-hi! link    FoldColumn      LineNr
-hi! link    SignColumn      LineNr
+call s:Highlight('Tabs',              s:DarkGrey                      )
+call s:Highlight('SubtleSpaces',      s:Black                         )
+call s:Highlight('MixedSpaces',       s:DarkGrey                      )
+call s:Highlight('TrailingSpace',     s:DarkCyan                      )
 
-hi! link    Question        Identifier
-hi! link    WildMenu        DiffAdd
-hi! link    TagListFileName Directory
-hi! link    IncSearch       Search
-hi! link    SpecialKey      String
-hi! link    MoreMsg         String
 
-hi! link    XmlTagName      XmlTag
-hi! link    XmlEndTag       XmlTag
-hi! link    xmlAttrib       Identifier
+call s:HighlightLink('SpellBad',        'ErrorMsg'        )
+call s:HighlightLink('SpellCap',        'WarningMsg'      )
+call s:HighlightLink('SpellRare',       'WarningMsg'      )
+call s:HighlightLink('SpellLocal',      'WarningMsg'      )
 
-"   hi! ModeMsg
-"   hi! VisualNOS
-"   hi! Conceal
-"   hi! TabLine
-"   hi! TabLineSel
-"   hi! TabLineFill
-"   hi! MatchParen
+call s:HighlightLink('Pmenu',           'StatusLine'      )
+call s:HighlightLink('PmenuSel',        'WildMenu'        )
+call s:HighlightLink('PmenuSbar',       'StatusLineNC'    )
+call s:HighlightLink('PmenuThumb',      'StatusLine'      )
+
+call s:HighlightLink('MoreMsg',         'Todo'            )
+call s:HighlightLink('Question',        'MoreMsg'         )
+call s:HighlightLink('ModeMsg',         'Comment'         )
+call s:HighlightLink('Title',           'Identifier'      )
+call s:HighlightLink('QuickFixLine',    'StatusLine'      )
+
+call s:HighlightLink('Folded',          'StatusLine'      )
+call s:HighlightLink('FoldColumn',      'LineNr'          )
+call s:HighlightLink('SignColumn',      'WarningMsg'      )
+
+call s:HighlightLink('Conceal',         'StatusLine'      )
+call s:HighlightLink('SpecialKey',      'Todo'            )
+call s:HighlightLink('NonText',         'LineNr'          )
+call s:HighlightLink('MatchParen',      'DiffText'        )
+
+call s:HighlightLink('TabLine',         'StatusLine'      )
+call s:HighlightLink('TabLineSel',      'WildMenu'        )
+call s:HighlightLink('TabLineFill',     'StatusLineNC'    )

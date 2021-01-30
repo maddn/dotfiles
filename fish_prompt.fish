@@ -3,9 +3,6 @@ function fish_prompt
     or set retc red
 
     echo
-    if not set -q TMUX
-        iterm2_prompt_mark
-    end
 
     set_color red
     echo -n ' ┌─['

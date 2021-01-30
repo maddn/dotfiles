@@ -1,0 +1,65 @@
+# Configuration for Alacritty, the GPU enhanced terminal emulator.
+
+window:
+  dynamic_padding: false
+  startup_mode: Fullscreen
+
+font:
+  normal:
+    family: MesloLGS Nerd Font
+    style: Regular
+
+  bold:
+    family: MesloLGS Nerd Font
+    style: Regular
+
+  italic:
+    family: MesloLGS Nerd Font
+    style: Light
+
+  bold_italic:
+    family: MesloLGS Nerd Font
+    style: Light
+
+  size: 12
+  use_thin_strokes: true
+
+draw_bold_text_with_bright_colors: true
+
+colors:
+  primary:
+    background: '#1D1F21'
+    foreground: '#B3B3B3'
+    bright_foreground: '#C5C8C6'
+
+  normal:
+    black:   '#000000'
+    red:     '#805959'
+    green:   '#598059'
+    yellow:  '#807359'
+    blue:    '#596D80'
+    magenta: '#735980'
+    cyan:    '#598079'
+    white:   '#999999'
+
+  bright:
+    black:   '#333333'
+    red:     '#994D4D'
+    green:   '#6B996B'
+    yellow:  '#998A6B'
+    blue:    '#6B8299'
+    magenta: '#896A99'
+    cyan:    '#6B9991'
+    white:   '#B3B3B3'
+
+selection:
+  save_to_clipboard: true
+
+cursor:
+  style:
+    blinking: On
+
+live_config_reload: true
+
+key_bindings:
+  - { key: Key6,        mods: Control, chars: "\x1e"                     }

@@ -1,31 +1,45 @@
-DOT_FILES = .bash_profile \
-						.dir_colors \
-						.gitconfig \
-						.pylintrc \
-						.tmux.conf \
-						.tmuxline.conf \
-						.vim/vimrc \
-						.vim/maddn.vim \
-						.vim/colors/maddn.vim \
-						.vim/pack/plugin/start/vim-airline/autoload/airline/themes/maddn_airline.vim \
-						.config/fish/config.fish \
-						.config/fish/fish_variables \
-						.config/fish/functions/fish_default_mode_prompt.fish \
-						.config/fish/functions/fish_mode_prompt.fish \
-						.config/fish/functions/fish_prompt.fish \
-						.config/vifm/vifmrc \
-						.config/vifm/colors/maddn.vifm
+DOT_FILES = \
+	.alacritty.yml \
+	.bash_profile \
+	.dircolors \
+	.gitconfig \
+	.pylintrc \
+	.tmux.conf \
+	.tmuxline.conf \
+	.config/fish/config.fish \
+	.config/fish/fish_variables \
+	.config/fish/functions/fish_default_mode_prompt.fish \
+	.config/fish/functions/fish_mode_prompt.fish \
+	.config/fish/functions/fish_prompt.fish \
+	.config/pymentize/maddn.py \
+	.config/vifm/vifmrc \
+	.config/vifm/colors/maddn.vifm
+
+ifeq (, $(shell which nvim))
+VIM_PACK = $(HOME)/.vim/pack
+DOT_FILES += \
+	.vim/vimrc \
+	.vim/colors/maddn.vim \
+	.vim/pack/plugin/start/vim-airline/autoload/airline/themes/maddn_airline.vim
+else
+VIM_PACK = $(HOME)/.local/share/nvim/site/pack
+DOT_FILES += \
+	.config/nvim/init.vim \
+	.config/nvim/colors/maddn.vim \
+	.local/share/nvim/site/pack/plugin/start/vim-airline/autoload/airline/themes/maddn_airline.vim
+endif
+
 TARGET_FILES = $(DOT_FILES:%=$(HOME)/%)
 
-all: vim $(TARGET_FILES) fish
+
+all: vim $(TARGET_FILES) fish vim-helptags
 
 
 ## Vim ##
 
-VIM_PACK = $(HOME)/.vim/pack
 VIM_PACK_NAMES = plugin syntax tmux
 
-vim: $(VIM_PACK_NAMES:%=$(VIM_PACK)/%/start) vim-helptags
+vim: $(VIM_PACK_NAMES:%=$(VIM_PACK)/%/start)
 
 $(VIM_PACK)/plugin/start:
 	[ -d $@ ] || mkdir -p $@
@@ -57,7 +71,7 @@ vim-helptags:
 	    [ -d $$PLUGIN/doc ] && ARGS="helptags $$PLUGIN/doc | $$ARGS"; \
 	  done; \
 	done; \
-	vim -e -c "$$ARGS quitall"
+	command -v vim && vim -e -c "$$ARGS quitall"
 
 
 ## Fish ##
@@ -65,7 +79,7 @@ vim-helptags:
 FISH = $(HOME)/.config/fish
 BASS = $(FISH)/functions/bass.fish $(FISH)/functions/__bass.py
 
-fish: $(BASS) $(FISH)/iterm2_shell_integration.fish
+fish: $(BASS)
 
 $(BASS) &:
 	[ -d $(@D) ] || mkdir -p $(@D)
@@ -73,19 +87,15 @@ $(BASS) &:
 	cd /tmp/bass && make install
 	rm -rf /tmp/bass
 
-$(FISH)/iterm2_shell_integration.fish:
-	[ -d $(@D) ] || mkdir -p $(@D)
-	curl -L https://iterm2.com/shell_integration/fish -o $@
-
 
 clean:
 	rm -f $(TARGET_FILES)
-	rm -f $(FISH)/iterm2_shell_integration.fish $(BASS)
+	rm -f $(BASS)
 	rm -rf $(VIM_PACK_NAMES:%=$(VIM_PACK)/%)
 
 
 .SECONDEXPANSION:
 
-$(TARGET_FILES): $$(patsubst .%,%,$$(@F))
+$(TARGET_FILES): $$(patsubst init.vim,vimrc,$$(patsubst .%,%,$$(@F)))
 	[ -d $(@D) ] || mkdir -p $(@D)
 	ln -s $(CURDIR)/$< $@

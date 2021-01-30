@@ -1,8 +1,3 @@
-try
-  execute pathogen#infect()
-catch
-endtry
-
 set nocompatible
 set shell=/bin/bash
 
@@ -37,7 +32,9 @@ set splitright
 
 "Mouse
 set mouse=a
-set ttymouse=sgr
+if !has('nvim')
+  set ttymouse=sgr
+endif
 
 "Commnad line
 set showcmd
@@ -71,7 +68,7 @@ set viminfo+=n~/.vim/viminfo
 "------------------------------------------------------------------------------
 
 "Font
-set guifont=Menlo:h12
+set guifont=MesloLGS\ Nerd\ Font:h12
 
 "Bars
 set guioptions-=m  "remove menu bar
@@ -194,24 +191,6 @@ let g:tmuxline_preset = 'full'
 
 
 "------------------------------------------------------------------------------
-"--Whitespace highlighting
-"------------------------------------------------------------------------------
-
-"Higlight groups
-if has("gui_running")
-  highlight Tabs guibg=#333333
-  highlight SubtleSpaces guibg=#000000
-  highlight MixedSpaces guibg=#333333
-  highlight TrailingSpace guibg=#598079
-else
-  highlight Tabs ctermbg=DarkGrey
-  highlight SubtleSpaces ctermbg=Black
-  highlight MixedSpaces ctermbg=DarkGrey
-  highlight TrailingSpace ctermbg=DarkCyan
-endif
-
-
-"------------------------------------------------------------------------------
 "--Whitespace functions
 "------------------------------------------------------------------------------
 
@@ -324,6 +303,26 @@ endfunction
 
 command! ZoomToggle call s:ZoomToggle()
 
+"Run 'pyang --format tree' on input file(s) and output in new split
+function! s:PyangTree(files)
+  vnew
+  silent execute 'read !~/.local/bin/pyang --format tree ' . a:files
+  1
+endfunction
+
+"Run PyangTree on current file and all files in PWD that augment it
+function! s:PyangTreeWithAugments()
+  let prefix = matchlist(getline(search('prefix', 'n')),
+                       \ '^\s*prefix\s*\"\+\(.*\)\"\+;\s*$')
+  if len(prefix) > 1
+    let files = system("grep -l 'augment.*" . prefix[1] . "' *.yang")
+    call s:PyangTree(substitute(files, "\n", " ", "g") . expand('%'))
+  endif
+endfunction
+
+command! PyangTree call s:PyangTree(expand('%'))
+command! PyangTreeWithAugments call s:PyangTreeWithAugments()
+
 
 "------------------------------------------------------------------------------
 "--Auto commands
@@ -354,6 +353,12 @@ augroup general
   if bufname('%') == ''
     autocmd VimEnter * NERDTree | ReadBookmarks
   endif
+
+  "Keep help on the right
+  autocmd BufEnter *.txt
+        \ if &ft ==# 'help' |
+        \   wincmd L |
+        \ endif
 augroup end
 
 
@@ -366,19 +371,19 @@ augroup filetypes
   autocmd BufNewFile,BufRead *.ddl,*.sqlpart,*.sql,*.grt
         \ set filetype=sql | SQLSetType sqlvorax
 
-  "PL/SQL options
+  "PL/SQL
   autocmd FileType sql,plsql
         \ setlocal tabstop=3 |
         \ setlocal shiftwidth=3
 
-  "Mail options
+  "Mail
   autocmd FileType mail
-        \ setlocal tw=0 |
-        \ setlocal wrap |
+        \ setlocal colorcolumn=0 |
         \ setlocal linebreak |
         \ setlocal nolist |
-        \ setlocal colorcolumn=0 |
-        \ setlocal spell
+        \ setlocal spell spelllang=en_gb |
+        \ setlocal textwidth=0 |
+        \ setlocal wrap
 
   "Java Make errorformat output as Ant
   autocmd FileType java
@@ -387,10 +392,17 @@ augroup filetypes
 
   "Markdown filetypes
   autocmd FileType markdown
-        \ setlocal textwidth=79 |
+        \ setlocal autoindent |
         \ setlocal formatoptions-=l |
         \ setlocal spell spelllang=en_gb |
-        \ setlocal autoindent
+        \ setlocal textwidth=79
+
+  "Text files with spelling
+  autocmd Filetype text
+        \ setlocal colorcolumn=0 |
+        \ setlocal linebreak |
+        \ setlocal spell spelllang=en_gb |
+        \ setlocal wrap
 augroup end
 
 
@@ -412,10 +424,8 @@ augroup whitespace
         \ let w:TrailingSpaceMatch=matchadd('TrailingSpace', '\s\+$')
 
   "Ensure highlighting is applied to new windows
-  autocmd VimEnter * autocmd WinEnter * let w:created=1
-  autocmd VimEnter * let w:created=1
   autocmd WinEnter *
-        \ if !exists('w:created') |
+        \ if !exists('w:TrailingSpaceMatch') |
         \   let w:TrailingSpaceMatch=matchadd('TrailingSpace', '\s\+$') |
         \   call s:SetupWindow() |
         \  endif
