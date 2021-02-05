@@ -313,7 +313,7 @@ endfunction
 "Run PyangTree on current file and all files in PWD that augment it
 function! s:PyangTreeWithAugments()
   let prefix = matchlist(getline(search('prefix', 'n')),
-                       \ '^\s*prefix\s*\"\+\(.*\)\"\+;\s*$')
+                       \ '^\s*prefix\s*\"\=\(.*\)\"\=;\s*$')
   if len(prefix) > 1
     let files = system("grep -l 'augment.*" . prefix[1] . "' *.yang")
     call s:PyangTree(substitute(files, "\n", " ", "g") . expand('%'))

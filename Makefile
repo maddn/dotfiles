@@ -11,7 +11,7 @@ DOT_FILES = \
 	.config/fish/functions/fish_default_mode_prompt.fish \
 	.config/fish/functions/fish_mode_prompt.fish \
 	.config/fish/functions/fish_prompt.fish \
-	.config/pymentize/maddn.py \
+	.config/pygments/maddn.py \
 	.config/vifm/vifmrc \
 	.config/vifm/colors/maddn.vifm
 
@@ -71,7 +71,7 @@ vim-helptags:
 	    [ -d $$PLUGIN/doc ] && ARGS="helptags $$PLUGIN/doc | $$ARGS"; \
 	  done; \
 	done; \
-	command -v vim && vim -e -c "$$ARGS quitall"
+	command -v vim && vim -e -c "$$ARGS quitall" > /dev/null
 
 
 ## Fish ##

@@ -11,9 +11,6 @@ SETUVAR --export LESS_TERMCAP_ue:\x1b\x5b30m\x1b\x5bm\x0f
 SETUVAR --export LESS_TERMCAP_us:\x1b\x5b32m
 SETUVAR --export LSCOLORS:ExGxFxdaCxDaDahbadachc
 SETUVAR --export TERM:alacritty
-SETUVAR __fish_init_2_39_8:\x1d
-SETUVAR __fish_init_2_3_0:\x1d
-SETUVAR __fish_init_3_x:\x1d
 SETUVAR __fish_initialized:3100
 SETUVAR fish_color_autosuggestion:555\x1ebrblack
 SETUVAR fish_color_cancel:\x2dr
