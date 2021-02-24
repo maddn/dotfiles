@@ -112,8 +112,7 @@ endif
 
 set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
 
-"set statusline="  %t%= %A %10u:%-7g %15s %20d  "
-"windo set viewcolumns="-{name}...,65.50{uname},10{gname},15{perms},19{mtime},10{size}"
+windo set viewcolumns="-{name}...,65.50{uname},10{gname},15{perms},19{mtime},10{size}"
 
 " :mark mark /full/directory/path [filename]
 
