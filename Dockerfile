@@ -17,6 +17,7 @@ RUN apt-get update && \
 
 ENV LC_ALL en_GB.UTF-8
 ENV LANG en_GB.UTF-8
+ENV TZ Europe/London
 
 RUN yes | unminimize
 
@@ -31,8 +32,11 @@ RUN apt-get update && \
       erlang-nox \
       fish \
       git \
+      gnupg \
+      iputils-ping \
       less \
       libxml2-utils \
+      lsb-release \
       markdown \
       neovim \
       npm \
@@ -41,10 +45,25 @@ RUN apt-get update && \
       python3-pip \
       ssh-client \
       sudo \
+      syslog-ng \
       tmux \
+      tzdata \
       vifm \
       xsltproc && \
-    rm -rf /var/lib/apt/lists/* /root/.cache
+    rm -rf /var/lib/apt/lists/* /root/.cache && \
+    chmod +s /usr/sbin/syslog-ng
+
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+      gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
+    echo \
+      "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg]" \
+      " https://download.docker.com/linux/ubuntu" \
+      " $(lsb_release -cs) stable" | \
+      tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+    apt-get update && \
+    apt-get install --no-install-recommends --quiet --yes docker-ce-cli && \
+    rm -rf /var/lib/apt/lists/* /root/.cache && \
+    chmod +s /usr/bin/docker
 
 RUN git -C /tmp clone https://github.com/alacritty/alacritty.git && \
     tic -xe alacritty,alacritty-direct /tmp/alacritty/extra/alacritty.info && \
@@ -53,6 +72,12 @@ RUN git -C /tmp clone https://github.com/alacritty/alacritty.git && \
 RUN git -C /tmp clone https://github.com/hawk/lux.git && cd /tmp/lux && \
     autoconf && ./configure && make && make install && \
     rm -rf /tmp/lux
+
+RUN curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | \
+    os=ubuntu dist=focal bash && \
+    GITLAB_RUNNER_DISABLE_SKEL=true \
+      apt-get install --no-install-recommends --quiet --yes gitlab-runner && \
+    rm -rf /var/lib/apt/lists/* /root/.cache
 
 RUN useradd --no-log-init \
             --create-home \
@@ -89,4 +114,4 @@ RUN if [ -n "$(ls -A nso-installer)" ]; then \
 
 RUN rm -rf git
 
-CMD ["/usr/bin/tmux", "new-session", "-s", "dev-docker"]
+CMD ["/bin/sh", "/home/mmaddern/.docker_login.sh"]

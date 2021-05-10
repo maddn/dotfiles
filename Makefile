@@ -2,10 +2,12 @@ DOT_FILES = \
 	.alacritty.yml \
 	.bash_profile \
 	.dircolors \
+	.docker_login.sh \
 	.gitconfig \
 	.pylintrc \
 	.tmux.conf \
 	.tmuxline.conf \
+	.zshrc \
 	.config/fish/config.fish \
 	.config/fish/fish_variables \
 	.config/fish/functions/fish_default_mode_prompt.fish \
@@ -13,7 +15,8 @@ DOT_FILES = \
 	.config/fish/functions/fish_prompt.fish \
 	.config/pygments/maddn.py \
 	.config/vifm/vifmrc \
-	.config/vifm/colors/maddn.vifm
+	.config/vifm/colors/maddn.vifm \
+	.docker/config.json
 
 ifeq (, $(shell which nvim))
 VIM_PACK = $(HOME)/.vim/pack
@@ -80,6 +83,7 @@ FISH = $(HOME)/.config/fish
 BASS = $(FISH)/functions/bass.fish $(FISH)/functions/__bass.py
 
 fish: $(BASS)
+	fish -c fish_update_completions
 
 $(BASS) &:
 	[ -d $(@D) ] || mkdir -p $(@D)
