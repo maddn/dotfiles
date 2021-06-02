@@ -91,9 +91,8 @@ RUN useradd --no-log-init \
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
 
-RUN mkdir git
-COPY --chown=${USER_ID}:${GROUP_ID} dotfiles git/dotfiles
-RUN make -C git/dotfiles
+COPY --chown=${USER_ID}:${GROUP_ID} / git/dotfiles
+RUN cd git/dotfiles && mkdir -p nso-installer && mv nso-installer ~ && make
 
 RUN PATH=~/.local/bin:$PATH pip3 install \
       requests \
@@ -101,7 +100,6 @@ RUN PATH=~/.local/bin:$PATH pip3 install \
       pylint \
       pygments
 
-COPY --chown=${USER_ID}:${GROUP_ID} nso-installer nso-installer
 RUN if [ -n "$(ls -A nso-installer)" ]; then \
       for NSO_INSTALLER in nso-installer/*; do \
         NSO_VERSION=$(echo ${NSO_INSTALLER} | sed \
