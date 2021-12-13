@@ -1,0 +1,188 @@
+{
+    "$schema": "https://lnav.org/schemas/config-v1.schema.json",
+    "ui": {
+        "theme-defs": {
+            "maddn": {
+                "vars": {
+                    "black":      "#000000",
+                    "red":        "#994D4D",
+                    "green":      "#6B996B",
+                    "yellow":     "#998A6B",
+                    "blue":       "#6B8299",
+                    "magenta":    "#896A99",
+                    "cyan":       "#6B9991",
+                    "white":      "#B3B3B3",
+                    "grey":       "#777777",
+                    "dark_grey":  "#333333"
+                },
+                "styles": {
+                    "identifier": {
+                        "color": "$grey"
+                    },
+                    "text": {
+                        "color": "$white"
+                    },
+                    "alt-text": {
+                        "color": "$white"
+                    },
+                    "ok": {
+                        "color": "$green"
+                    },
+                    "error": {
+                        "color": "$red"
+                    },
+                    "warning": {
+                        "color": "$yellow"
+                    },
+                    "hidden": {
+                        "color": "$yellow"
+                    },
+                    "adjusted-time": {
+                        "color": "$green"
+                    },
+                    "skewed-time": {
+                        "color": "$yellow"
+                    },
+                    "offset-time": {
+                        "color": "$red"
+                    },
+                    "invalid-msg": {
+                        "color": "$yellow"
+                    },
+                    "focused": {
+                        "color": "$dark_grey",
+                        "background-color": "$yellow"
+                    },
+                    "disabled-focused": {
+                        "color": "$grey",
+                        "background-color": "$black"
+                    },
+                    "popup": {
+                        "color": "$black",
+                        "background-color": "$grey"
+                    },
+                    "scrollbar": {
+                        "color": "$dark_grey",
+                        "background-color": "$yellow"
+                    }
+                },
+                "syntax-styles": {
+                    "keyword": {
+                        "color": "$blue"
+                    },
+                    "string": {
+                        "color": "$cyan"
+                    },
+                    "comment": {
+                        "color": "$cyan"
+                    },
+                    "doc-directive": {
+                        "color": "$magenta"
+                    },
+                    "variable": {
+                        "color": "$green"
+                    },
+                    "symbol": {
+                        "color": "$magenta"
+                    },
+                    "re-special": {
+                        "color": "$cyan"
+                    },
+                    "re-repeat": {
+                        "color": "$yellow"
+                    },
+                    "diff-delete": {
+                        "color": "$red"
+                    },
+                    "diff-add": {
+                        "color": "$green"
+                    },
+                    "diff-section": {
+                        "color": "$yellow"
+                    },
+                    "file": {
+                        "color": "$blue"
+                    }
+                },
+                "status-styles": {
+                    "disabled-title": {
+                        "color": "$grey"
+                    },
+                    "title": {
+                        "color": "$dark_grey",
+                        "background-color": "$yellow"
+                    },
+                    "subtitle": {
+                        "color": "$yellow",
+                        "background-color": "$black"
+                    },
+                    "title-hotkey": {
+                        "color": "$black",
+                        "background-color": "$yellow",
+                        "underline": true
+                    },
+                    "hotkey": {
+                        "color": "$grey",
+                        "background-color": "$dark_grey",
+                        "underline": true
+                    },
+                    "text": {
+                        "color": "$white",
+                        "background-color": "$dark_grey"
+                    },
+                    "warn": {
+                        "color": "$yellow",
+                        "background-color": "$dark_grey"
+                    },
+                    "alert": {
+                        "color": "$red",
+                        "background-color": "$dark_grey"
+                    },
+                    "active": {
+                        "color": "$white",
+                        "background-color": "$dark_grey"
+                    },
+                    "inactive": {
+                        "color": "$grey",
+                        "background-color": "$black"
+                    }
+                },
+                "log-level-styles": {
+                    "warning": {
+                        "color": "$yellow"
+                    },
+                    "error": {
+                        "color": "$red"
+                    },
+                    "critical": {
+                        "color": "$red"
+                    },
+                    "fatal": {
+                        "color": "$red"
+                    }
+                },
+                "highlights": {
+                    "colors": {
+                        "pattern": "(?:#[a-fA-F0-9]{6}|#[a-fA-F0-9]{3}\\b)",
+                        "style": {
+                            "color": "$magenta"
+                        }
+                    },
+                    "ipv4": {
+                        "pattern": "\\b(?<!\\d\\.)\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b(?!\\.\\d)",
+                        "style": {
+                            "color": "$green"
+                        }
+                    },
+                    "xml": {
+                        "pattern": "(?<!<)</?([^ <>=]+)[^>]*>",
+                        "style": {
+                            "color": "$cyan"
+                        }
+                    }
+                }
+            }
+        },
+        "theme": "maddn"
+    }
+}

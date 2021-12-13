@@ -1,3 +1,3 @@
 {
-  "psFormat": "table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.Status}}\t{{if ne .Size \"0B\"}}{{.Size}}{{end}}\t{{if eq .Ports \"PORTS\"}}{{.Ports}}{{else}}{{range $index, $port := split .Ports \", \"}}{{if .}}{{if ne (slice . 0 3) \":::\"}}{{if gt $index 1}}\n\t\t\t\t\t{{end}}{{.}}{{end}}{{end}}{{end}}{{end}}"
+  "psFormat": "table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.Status}}\t{{if ne .Size \"0B\"}}{{.Size}}{{end}}\t{{if eq .Ports \"PORTS\"}}{{.Ports}}{{else}}{{range $index, $port := split .Ports \", \"}}{{if .}}{{if ne (slice . 0 3) \":::\"}}{{if gt $index 0}}\n\t\t\t\t\t{{end}}{{.}}{{end}}{{end}}{{end}}{{end}}"
 }

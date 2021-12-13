@@ -1,0 +1,408 @@
+{
+    "$schema": "https://lnav.org/schemas/format-v1.schema.json",
+
+    "audit_log": {
+        "title": "NSO audit log format",
+        "description": "Log format used by NSO for auditing",
+        "file-pattern": "audit\\.log",
+        "regex": {
+            "python_vm": {
+                "pattern": "^<(?<level>\\w+)> (?<timestamp>\\d\\d?-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) (?<hostname>[\\w-]+) (?<pid_group>ncs\\[(?<pid>\\d+)\\]:) (?<audit_text>audit user:) (?<user>[\\w-]+)/(?<session>\\d+) (?<body>.*)"
+            }
+        },
+        "level": {
+            "critical": "CRIT",
+            "error": "ERR",
+            "warning": "WARNING",
+            "debug": "DEBUG",
+            "info": "INFO"
+        },
+        "value": {
+            "hostname": {
+                "kind": "string",
+                "identifier": true,
+                "hidden": true
+            },
+            "pid_group": {
+                "kind": "string",
+                "hidden": true
+            },
+            "pid": {
+                "kind": "integer",
+                "identifier": true
+            },
+            "audit_text": {
+                "kind": "string",
+                "hidden": true
+            },
+            "user": {
+                "kind": "string",
+                "identifier": true
+            },
+            "session": {
+                "kind": "integer",
+                "identifier": true
+            },
+            "body": {
+                "kind": "string"
+            }
+        },
+        "timestamp-format": [
+            "%e-%b-%Y::%H:%M:%S.%L"
+        ],
+        "sample": [
+            {
+                "line": "<INFO> 16-Aug-2021::15:18:21.786 maddn-dev ncs[332]: audit user: mmaddern/62 CLI 'commit'"
+            }
+        ]
+    },
+
+    "devel_log": {
+        "title": "NSO developer log format",
+        "description": "Log format used by NSO for developer logs",
+        "file-pattern": "devel\\.log",
+        "regex": {
+            "python_vm": {
+                "pattern": "^<(?<level>\\w+)> (?<timestamp>\\d\\d?-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) (?<hostname>[\\w-]+) (?<pid_group>ncs\\[(?<pid>\\d+)\\]:) (?<function>[\\w-]+) (?<body>.*)"
+            }
+        },
+        "level": {
+            "critical": "CRIT",
+            "error": "ERR",
+            "warning": "WARNING",
+            "debug": "DEBUG",
+            "info": "INFO"
+        },
+        "value": {
+            "hostname": {
+                "kind": "string",
+                "identifier": true,
+                "hidden": true
+            },
+            "pid_group": {
+                "kind": "integer",
+                "hidden": true
+            },
+            "pid": {
+                "kind": "integer",
+                "identifier": true
+            },
+            "function": {
+                "kind": "string",
+                "identifier": true
+            },
+            "body": {
+                "kind": "string"
+            }
+        },
+        "timestamp-format": [
+            "%e-%b-%Y::%H:%M:%S.%L"
+        ],
+        "sample": [
+            {
+                "line": "<INFO> 11-Jun-2021::17:52:17.479 maddn-dev ncs[27833]: devel-c [stopping] Daemon closed (name: ncs-dp-13-custom-template-utils:CustomTemplateInfoActions, daemon id: 52)"
+            }
+        ]
+    },
+
+    "ncs_log": {
+        "title": "NSO NCS daemon log format",
+        "description": "Log format used by NSO NCS daemon",
+        "file-pattern": "ncs\\.log",
+        "regex": {
+            "python_vm": {
+                "pattern": "^<(?<level>\\w+)> (?<timestamp>\\d\\d?-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) (?<hostname>[\\w-]+) (?<pid_group>ncs\\[(?<pid>\\d+)\\]: -) (?<body>.*)"
+            }
+        },
+        "level": {
+            "critical": "CRIT",
+            "error": "ERR",
+            "warning": "WARNING",
+            "debug": "DEBUG",
+            "info": "INFO"
+        },
+        "value": {
+            "hostname": {
+                "kind": "string",
+                "identifier": true,
+                "hidden": true
+            },
+            "pid_group": {
+                "kind": "integer",
+                "hidden": true
+            },
+            "pid": {
+                "kind": "integer",
+                "identifier": true
+            },
+            "body": {
+                "kind": "string"
+            }
+        },
+        "timestamp-format": [
+            "%e-%b-%Y::%H:%M:%S.%L"
+        ],
+        "sample": [
+            {
+                "line": "<INFO> 11-Jun-2021::15:44:38.079 maddn-dev ncs[27833]: - CDB load: processing file: /home/mmaddern/nso-5.4.2/var/ncs/cdb/aaa_init.xml"
+            }
+        ]
+    },
+
+    "ncs_java_log": {
+        "title": "NSO Java log format",
+        "description": "Log format used by NSO Java VM",
+        "file-pattern": "ncs-java-vm\\.log",
+        "regex": {
+            "python_vm": {
+                "pattern": "^<(?<level>\\w+)> (?<timestamp>\\d{2}-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) (?<class>[\\w-]+) (?<function>.+): - (?<body>.*)"
+                // <PatternLayout pattern="&#60;%-4p&#62; %d{dd-MMM-yyyy::HH:mm:ss.SSS} %C{1} %t: - %m%n"/>
+            }
+        },
+        "level": {
+            "critical": "CRIT",
+            "error": "ERROR",
+            "warning": "WARN",
+            "debug": "DEBUG",
+            "info": "INFO"
+        },
+        "value": {
+            "class": {
+                "kind": "string",
+                "identifier": true,
+                "hidden": true
+            },
+            "function": {
+                "kind": "string",
+                "identifier": true
+            },
+            "body": {
+                "kind": "string"
+            }
+        },
+        "timestamp-format": [
+            "%d-%b-%Y::%H:%M:%S.%L"
+        ],
+        "sample": [
+            {
+                "line": "<INFO> 11-Jun-2021::15:51:32.599 TemplateMapperSub (core-fp-common:Template Mapper Subscriber)-Run-10: - Iterating TemplateMapper yang monitor"
+            }
+        ]
+    },
+
+    "ncs_python_log": {
+        "title": "NSO Python log format",
+        "description": "Log format used by the main NSO Python VM",
+        "file-pattern": "ncs-python-vm\\.log",
+        "regex": {
+            "python_vm": {
+                "pattern": "^<(?<level>\\w+)> (?<timestamp>\\d\\d?-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) (?<hostname>[\\w-]+) (?<pid_group>ncs\\[(?<pid>\\d+)\\]:) (?<body>.*)"
+            }
+        },
+        "level": {
+            "critical": "CRIT",
+            "error": "ERR",
+            "warning": "WARN",
+            "debug": "DEBUG",
+            "info": "INFO"
+        },
+        "value": {
+            "hostname": {
+                "kind": "string",
+                "identifier": true,
+                "hidden": true
+            },
+            "pid_group": {
+                "kind": "integer",
+                "hidden": true
+            },
+            "pid": {
+                "kind": "integer",
+                "identifier": true
+            },
+            "body": {
+                "kind": "string"
+            }
+        },
+        "timestamp-format": [
+            "%e-%b-%Y::%H:%M:%S.%L"
+        ],
+        "sample": [
+            {
+                "line": "<INFO> 25-Jun-2021::13:16:13.440 maddn-dev ncs[100]: Started PyVM: <<\"cisco-sr-te-settings-fp\">> , Port=#Port<0.2424> , OSpid=\"1408\""
+            }
+        ]
+    },
+
+    "ncs_python_app_log": {
+        "title": "NSO Python log format",
+        "description": "Log format used by NSO App Python VMs",
+        "file-pattern": "ncs-python-vm-.+\\.log",
+        "regex": {
+            "python_vm": {
+                "pattern": "^<(?<level>\\w+)> (?<timestamp>\\d{2}-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2})\\.\\d{1,3} (?<class>[\\w-]+) (?<function_group>(?<function>.*): -) (?<body>.*)"
+            }
+        },
+        "level": {
+            "critical": "CRIT",
+            "error": "ERROR",
+            "warning": "WARN",
+            "debug": "DEBUG",
+            "info": "INFO"
+        },
+        "value": {
+            "class": {
+                "kind": "string",
+                "identifier": true,
+                "hidden": true
+            },
+            "function_group": {
+                "kind": "string",
+                "hidden": true
+            },
+            "function": {
+                "kind": "string",
+                "identifier": true
+            },
+            "body": {
+                "kind": "string"
+            }
+        },
+        "timestamp-format": [
+            "%d-%b-%Y::%H:%M:%S"
+        ],
+        "sample": [
+            {
+                "line": "<INFO> 11-Jun-2021::17:52:17.975 cisco-sr-te-cfp MainThread: - joined ComponentThread sr_te_multi_vendors.main.Main"
+            }
+        ]
+    },
+
+    "xpath_trace": {
+        "title": "NSO XPath trace format",
+        "description": "Log format used by NSO for XPath trace",
+        "file-pattern": "xpath\\.trace",
+        "regex": {
+            "python_vm": {
+                "pattern": "(?<timestamp>\\d\\d?-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) (?<body>.*)"
+            }
+        },
+        "value": {
+            "body": {
+                "kind": "string"
+            }
+        },
+        "timestamp-format": [
+            "%e-%b-%Y::%H:%M:%S"
+        ],
+        "sample": [
+            {
+                "line": "16-Jun-2021::10:57:53.869 result: /devices/device[name='xr2']/ned-settings: true"
+            }
+        ]
+    },
+
+    "ned_trace": {
+        "title": "NSO NED trace format",
+        "description": "Log format used by NSO NEDs for device trace files",
+        "file-pattern": "ned-.+\\.trace",
+        "regex": {
+            "python_vm": {
+                "pattern": "(?<direction><<|>>) (?<timestamp>\\d{2}-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) user: (?<user>[\\w-]+)/(?<session>\\d+) thandle (?<thandle>\\d+) hostname (?<hostname>[\\w-]+) device (?<device>[\\w-]+) (?<body>.*)"
+            }
+        },
+        "value": {
+            "direction": {
+                "kind": "string",
+                "identifier": true
+            },
+            "user": {
+                "kind": "string",
+                "identifier": true
+            },
+            "session": {
+                "kind": "integer",
+                "identifier": true
+            },
+            "thandle": {
+                "kind": "integer",
+                "identifier": true
+            },
+            "hostname": {
+                "kind": "string",
+                "identifier": true
+            },
+            "device": {
+                "kind": "string",
+                "identifier": true
+            },
+            "body": {
+                "kind": "string"
+            }
+        },
+        "timestamp-format": [
+            "%d-%b-%Y::%H:%M:%S"
+        ],
+        "sample": [
+            {
+                "line": "<< 16-Aug-2021::15:41:43.476 user: mmaddern/62 thandle 21366 hostname maddn-dev device sr-pe2 ERROR: Failed to connect to device sr-pe2:"
+            }
+        ]
+    },
+
+    "netconf_trace": {
+        "title": "NSO NETCONF NED trace format",
+        "description": "Log format used by NSO NETCONF NEDs for device trace files",
+        "file-pattern": "netconf-.+\\.trace",
+        "regex": {
+            "python_vm": {
+                "pattern": "(?<direction><<<<in|>>>>out) (?<timestamp>\\d{2}-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) user: (?<user>[\\w-]+)/(?<session>\\d+) thandle (?<thandle>\\d+) hostname (?<hostname>[\\w-]+) device (?<device>[\\w-]+) ?(?<body>.*)"
+            }
+        },
+        "value": {
+            "direction": {
+                "kind": "string",
+                "identifier": true
+            },
+            "user": {
+                "kind": "string",
+                "identifier": true
+            },
+            "session": {
+                "kind": "integer",
+                "identifier": true
+            },
+            "thandle": {
+                "kind": "integer",
+                "identifier": true
+            },
+            "hostname": {
+                "kind": "string",
+                "identifier": true
+            },
+            "device": {
+                "kind": "string",
+                "identifier": true
+            },
+            "body": {
+                "kind": "string"
+            }
+        },
+        "timestamp-format": [
+            "%d-%b-%Y::%H:%M:%S"
+        ],
+        "sample": [
+            {
+                "line": "<<<<in 20-Aug-2021::12:09:00.941 user: admin/324 thandle 24906 hostname maddn-dev device pe1"
+            }
+        ]
+    },
+
+    "access_log": {
+        "value": {
+            "cs_user_agent": {
+                "hidden": true
+            }
+        }
+    }
+}

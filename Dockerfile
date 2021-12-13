@@ -33,21 +33,29 @@ RUN apt-get update && \
       fish \
       git \
       gnupg \
+      iproute2 \
       iputils-ping \
       less \
       libxml2-utils \
+      libvirt-dev \
       lsb-release \
       markdown \
       neovim \
       npm \
+      openconnect \
+      pkg-config \
+      python3-dev \
       python3-neovim \
       python-is-python3 \
       python3-pip \
       ssh-client \
       sudo \
       syslog-ng \
+      telnet \
       tmux \
+      traceroute \
       tzdata \
+      unzip \
       vifm \
       xsltproc && \
     rm -rf /var/lib/apt/lists/* /root/.cache && \
@@ -73,18 +81,25 @@ RUN git -C /tmp clone https://github.com/hawk/lux.git && cd /tmp/lux && \
     autoconf && ./configure && make && make install && \
     rm -rf /tmp/lux
 
+RUN curl -L --output /tmp/lnav-0.10.0-musl-64bit.zip \
+    https://github.com/tstack/lnav/releases/download/v0.10.0/lnav-0.10.0-musl-64bit.zip && \
+    unzip -j /tmp/lnav-0.10.0-musl-64bit.zip lnav-0.10.0/lnav -d /usr/local/bin && \
+    rm -rf /tmp/lnav-0.10.0-musl-64bit.zip
+
 RUN curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | \
     os=ubuntu dist=focal bash && \
     GITLAB_RUNNER_DISABLE_SKEL=true \
       apt-get install --no-install-recommends --quiet --yes gitlab-runner && \
-    rm -rf /var/lib/apt/lists/* /root/.cache
+    rm -rf /var/lib/apt/lists/* /root/.cache && \
+    chmod 755 /etc/gitlab-runner && \
+    ln -sf /home/${USER_NAME}/nso/nid/gitlab-runner/config.toml /etc/gitlab-runner/config.toml
 
 RUN useradd --no-log-init \
             --create-home \
             --shell /usr/bin/fish \
             --uid ${USER_ID} \
             --gid ${GROUP_ID} \
-            --groups sudo \
+            --groups sudo,adm \
             ${USER_NAME} && \
     echo "${USER_NAME}:${PASSWORD}" | chpasswd
 
@@ -95,10 +110,12 @@ COPY --chown=${USER_ID}:${GROUP_ID} / git/dotfiles
 RUN cd git/dotfiles && mkdir -p nso-installer && mv nso-installer ~ && make
 
 RUN PATH=~/.local/bin:$PATH pip3 install \
-      requests \
+      libvirt-python \
       pyang \
+      pycdlib \
+      pygments \
       pylint \
-      pygments
+      requests
 
 RUN if [ -n "$(ls -A nso-installer)" ]; then \
       for NSO_INSTALLER in nso-installer/*; do \
