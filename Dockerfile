@@ -1,4 +1,4 @@
-FROM ubuntu:groovy
+FROM ubuntu:impish
 
 ARG USER_ID=501
 ARG GROUP_ID=20
@@ -35,13 +35,13 @@ RUN apt-get update && \
       gnupg \
       iproute2 \
       iputils-ping \
+      iptables \
       less \
       libxml2-utils \
       libvirt-dev \
       lsb-release \
       markdown \
       neovim \
-      npm \
       openconnect \
       pkg-config \
       python3-dev \
@@ -57,9 +57,14 @@ RUN apt-get update && \
       tzdata \
       unzip \
       vifm \
+      xmlstarlet \
       xsltproc && \
     rm -rf /var/lib/apt/lists/* /root/.cache && \
     chmod +s /usr/sbin/syslog-ng
+
+RUN curl -fsSL https://deb.nodesource.com/setup_17.x | bash - && \
+    apt-get install --no-install-recommends --quiet --yes \
+      nodejs
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
       gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
@@ -86,14 +91,6 @@ RUN curl -L --output /tmp/lnav-0.10.0-musl-64bit.zip \
     unzip -j /tmp/lnav-0.10.0-musl-64bit.zip lnav-0.10.0/lnav -d /usr/local/bin && \
     rm -rf /tmp/lnav-0.10.0-musl-64bit.zip
 
-RUN curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | \
-    os=ubuntu dist=focal bash && \
-    GITLAB_RUNNER_DISABLE_SKEL=true \
-      apt-get install --no-install-recommends --quiet --yes gitlab-runner && \
-    rm -rf /var/lib/apt/lists/* /root/.cache && \
-    chmod 755 /etc/gitlab-runner && \
-    ln -sf /home/${USER_NAME}/nso/nid/gitlab-runner/config.toml /etc/gitlab-runner/config.toml
-
 RUN useradd --no-log-init \
             --create-home \
             --shell /usr/bin/fish \
@@ -115,6 +112,7 @@ RUN PATH=~/.local/bin:$PATH pip3 install \
       pycdlib \
       pygments \
       pylint \
+      pyyaml \
       requests
 
 RUN if [ -n "$(ls -A nso-installer)" ]; then \

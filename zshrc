@@ -8,7 +8,8 @@ function dev() {
              -v ~/.fish_history:${BIND_HOME}/.local/share/fish/fish_history \
              -v /var/run/docker.sock:/run/docker.sock \
              -v nso-run:${BIND_HOME}/nso-run \
-             -p 80:8080 \
+             -p 8080:8080 \
+             -p 3000:3000 \
              -p 13389:13389 \
              --hostname maddn-dev \
              --cap-add=NET_ADMIN \
