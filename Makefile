@@ -61,7 +61,6 @@ $(VIM_PACK)/syntax/start:
 	git -C $@ clone https://github.com/nathanalderson/yang.vim.git
 	git -C $@ clone --recursive https://github.com/davidhalter/jedi-vim.git
 	git -C $@ clone https://github.com/mxw/vim-jsx.git
-	git -C $@ clone https://github.com/ternjs/tern_for_vim.git
 
 $(VIM_PACK)/tmux/start:
 	[ -d $@ ] || mkdir -p $@
