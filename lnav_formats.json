@@ -240,7 +240,7 @@
         "file-pattern": "ncs-python-vm-.+\\.log",
         "regex": {
             "python_vm": {
-                "pattern": "^<(?<level>\\w+)> (?<timestamp>\\d{2}-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2})\\.\\d{1,3} (?<class>[\\w-]+) (?<function_group>(?<function>.*): -) (?<body>.*)"
+                "pattern": "^<(?<level>\\w+)> (?<timestamp>\\d{2}-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) (?<class>[\\w-]+) (?<function_group>(?<function>.*): -) (?<body>.*)"
             }
         },
         "level": {
@@ -269,7 +269,7 @@
             }
         },
         "timestamp-format": [
-            "%d-%b-%Y::%H:%M:%S"
+            "%d-%b-%Y::%H:%M:%S.%L"
         ],
         "sample": [
             {
@@ -341,7 +341,7 @@
             }
         },
         "timestamp-format": [
-            "%d-%b-%Y::%H:%M:%S"
+            "%d-%b-%Y::%H:%M:%S.%L"
         ],
         "sample": [
             {
@@ -389,7 +389,7 @@
             }
         },
         "timestamp-format": [
-            "%d-%b-%Y::%H:%M:%S"
+            "%d-%b-%Y::%H:%M:%S.%L"
         ],
         "sample": [
             {
