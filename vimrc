@@ -306,7 +306,7 @@ command! ZoomToggle call s:ZoomToggle()
 "Run 'pyang --format tree' on input file(s) and output in new split
 function! s:PyangTree(files)
   vnew
-  silent execute 'read !~/.local/bin/pyang --format tree ' . a:files
+  silent execute 'read !~/.local/bin/pyang --format tree --path $NCS_DIR/src/ncs/yang ' . a:files
   1
 endfunction
 
@@ -403,6 +403,7 @@ augroup filetypes
         \ setlocal colorcolumn=0 |
         \ setlocal linebreak |
         \ setlocal spell spelllang=en_gb |
+        \ setlocal nospell |
         \ setlocal wrap
 augroup end
 
