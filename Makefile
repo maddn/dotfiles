@@ -84,7 +84,7 @@ FISH = $(HOME)/.config/fish
 BASS = $(FISH)/functions/bass.fish $(FISH)/functions/__bass.py
 
 fish: $(BASS)
-	fish -c fish_update_completions
+	#fish -c fish_update_completions
 
 $(BASS) &:
 	[ -d $(@D) ] || mkdir -p $(@D)
