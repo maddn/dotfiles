@@ -63,7 +63,7 @@
         "file-pattern": "devel\\.log",
         "regex": {
             "python_vm": {
-                "pattern": "^<(?<level>\\w+)> (?<timestamp>\\d\\d?-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) (?<hostname>[\\w-]+) (?<pid_group>ncs\\[(?<pid>\\d+)\\]:) (?<function>[\\w-]+) (?<body>.*)"
+                "pattern": "^<(?<level>\\w+)> (?<timestamp>\\d\\d?-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) (?<hostname>[\\w-]+) (?<pid_group>ncs\\[(?<pid>[\\d\\<\\>\\.]+)\\]:) (?<function>[\\w-]+) (?<body>.*)"
             }
         },
         "level": {
@@ -308,7 +308,7 @@
         "file-pattern": "ned-.+\\.trace",
         "regex": {
             "python_vm": {
-                "pattern": "(?<direction><<|>>) (?<timestamp>\\d{2}-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) user: (?<user>[\\w-]+)/(?<session>\\d+) thandle (?<thandle>\\d+) hostname (?<hostname>[\\w-]+) device (?<device>[\\w-]+) (?<body>.*)"
+                "pattern": "(?<direction><<|>>) (?<timestamp>\\d\\d?-\\w+-\\d{4}::\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) user: (?<user>[\\w-]+)/(?<session>\\d+) thandle (?<thandle>\\d+) hostname (?<hostname>[\\w-]+) device (?<device>[\\w-]+) (?<body>.*)"
             }
         },
         "value": {
@@ -341,7 +341,7 @@
             }
         },
         "timestamp-format": [
-            "%d-%b-%Y::%H:%M:%S.%L"
+            "%e-%b-%Y::%H:%M:%S.%L"
         ],
         "sample": [
             {

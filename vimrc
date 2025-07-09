@@ -169,15 +169,16 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_java_checkers = ["javac"]
 let g:syntastic_javascript_eslint_generic=1
-let g:syntastic_javascript_eslint_exe="eval $(npm bin)/eslint"
+let g:syntastic_javascript_eslint_exe="npx eslint"
 let g:syntastic_javascript_eslint_exec="/bin/ls"
-let g:syntastic_javascript_eslint_args='-f compact'
+let g:syntastic_javascript_eslint_args='--format compact'
 let g:syntastic_javascript_checkers = ["eslint"]
 let g:syntastic_javascript_closurecompiler_script = "closure-compiler"
 let g:syntastic_python_checkers = ["pylint"]
 let g:syntastic_yang_pyang_exe = "~/.local/bin/pyang"
 let g:syntastic_yang_pyang_args =
   \ "--path=$NCS_DIR/src/ncs/yang --canonical --ignore-error=MODULE_NOT_FOUND"
+let g:syntastic_filetype_map = { "javascriptreact": "javascript" }
 
 "JSX
 let g:jsx_ext_required = 0
@@ -188,6 +189,10 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline_theme="maddn_airline"
 let g:airline_powerline_fonts = 1
 let g:tmuxline_preset = 'full'
+
+"ALE
+"let g:ale_lint_on_text_changed = 'never'
+"let g:ale_lint_on_insert_leave = 0
 
 
 "------------------------------------------------------------------------------
@@ -345,8 +350,8 @@ augroup general
   "Copy to terminal
   autocmd TextYankPost *
         \ if v:event.operator is 'y' && v:event.regname is '' |
-        \   if exists(':OSCYankReg') |
-        \     OSCYankReg " |
+        \   if exists(':OSCYankRegister') |
+        \     execute 'OSCYankRegister "' |
         \   endif |
         \ endif
 
@@ -405,6 +410,10 @@ augroup filetypes
         \ setlocal spell spelllang=en_gb |
         \ setlocal nospell |
         \ setlocal wrap
+
+  "XML files
+  autocmd Filetype xml
+        \ setlocal indentexpr= 
 augroup end
 
 

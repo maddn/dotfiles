@@ -42,7 +42,7 @@ all: vim $(TARGET_FILES) fish vim-helptags
 
 ## Vim ##
 
-VIM_PACK_NAMES = plugin syntax tmux
+VIM_PACK_NAMES = plugin syntax tmux github
 
 vim: $(VIM_PACK_NAMES:%=$(VIM_PACK)/%/start)
 
@@ -56,11 +56,11 @@ $(VIM_PACK)/plugin/start:
 
 $(VIM_PACK)/syntax/start:
 	[ -d $@ ] || mkdir -p $@
-	git -C $@ clone https://github.com/vim-syntastic/syntastic.git
 	git -C $@ clone https://github.com/pangloss/vim-javascript.git
 	git -C $@ clone https://github.com/nathanalderson/yang.vim.git
 	git -C $@ clone --recursive https://github.com/davidhalter/jedi-vim.git
-	git -C $@ clone https://github.com/mxw/vim-jsx.git
+	git -C $@ clone https://github.com/MaxMEllon/vim-jsx-pretty.git
+	git -C $@ clone --depth 1 https://github.com/dense-analysis/ale.git
 
 $(VIM_PACK)/tmux/start:
 	[ -d $@ ] || mkdir -p $@
@@ -68,6 +68,10 @@ $(VIM_PACK)/tmux/start:
 	git -C $@ clone https://github.com/ojroques/vim-oscyank.git
 	git -C $@ clone https://github.com/christoomey/vim-tmux-navigator.git
 	git -C $@ clone https://github.com/tmux-plugins/vim-tmux-focus-events.git
+
+$(VIM_PACK)/github/start:
+	[ -d $@ ] || mkdir -p $@
+	git -C $@ clone https://github.com/github/copilot.vim
 
 vim-helptags:
 	for PACK in $(VIM_PACK_NAMES); do \
