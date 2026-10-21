@@ -5,6 +5,7 @@ FROM ubuntu:noble
 ARG USER_ID=501
 ARG GROUP_ID=20
 ARG USER_NAME=mmaddern
+ARG ARCH=arm64
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM=alacritty
@@ -43,6 +44,7 @@ RUN apt-get update && \
       less \
       libxml2-utils \
       libvirt-dev \
+      lnav \
       lsb-release \
       markdown \
       neovim \
@@ -74,7 +76,7 @@ RUN apt-get update && \
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
       gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
     echo \
-      "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg]" \
+      "deb [arch=$ARCH signed-by=/usr/share/keyrings/docker-archive-keyring.gpg]" \
       " https://download.docker.com/linux/ubuntu" \
       " $(lsb_release -cs) stable" | \
       tee /etc/apt/sources.list.d/docker.list > /dev/null && \
@@ -87,10 +89,6 @@ RUN git -C /tmp clone https://github.com/hawk/lux.git && cd /tmp/lux && \
     autoconf && ./configure && make && make install && \
     rm -rf /tmp/lux
 
-RUN curl -L --output /tmp/lnav-0.10.0-musl-64bit.zip \
-    https://github.com/tstack/lnav/releases/download/v0.10.0/lnav-0.10.0-musl-64bit.zip && \
-    unzip -j /tmp/lnav-0.10.0-musl-64bit.zip lnav-0.10.0/lnav -d /usr/local/bin && \
-    rm -rf /tmp/lnav-0.10.0-musl-64bit.zip
 
 RUN echo "ListenAddress 127.0.0.1" > /etc/ssh/sshd_config.d/10-self-login-only.conf && \
     echo "PasswordAuthentication no" >> /etc/ssh/sshd_config.d/10-self-login-only.conf
@@ -136,7 +134,7 @@ RUN PATH=~/.local/bin:$PATH pip3 install --break-system-packages \
 RUN if [ -n "$(ls -A nso-installer)" ]; then \
       for NSO_INSTALLER in nso-installer/*; do \
         NSO_VERSION=$(echo ${NSO_INSTALLER} | sed \
-          's/^nso-installer\/nso-\(.*\)\.linux\.x86_64\.installer\.bin$/\1/'); \
+          "s/^nso-installer\/nso-\(.*\)\.linux\.${ARCH}\.installer\.bin$/\1/"); \
         sh ${NSO_INSTALLER} nso-${NSO_VERSION}; \
       done; \
       ln -s nso-${NSO_VERSION} nso-current; \
