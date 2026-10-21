@@ -1,8 +1,8 @@
 [user]
-	email = michael.maddern@gmail.com
+	email = maddn@users.noreply.github.com
 	name = Michael Maddern
 [http]
-	sslVerify = false
+	sslVerify = true
 [diff]
 	tool = vimdiff
 [difftool]

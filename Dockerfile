@@ -10,6 +10,8 @@ ARG ARCH=arm64
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM=alacritty
 
+COPY ca-certificates/* /usr/local/share/ca-certificates/
+
 RUN apt-get update && \
     apt-get install --no-install-recommends --quiet --yes \
       unminimize \
