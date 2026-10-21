@@ -5,7 +5,6 @@ FROM ubuntu:noble
 ARG USER_ID=501
 ARG GROUP_ID=20
 ARG USER_NAME=mmaddern
-ARG PASSWORD=docker
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM=alacritty
@@ -96,7 +95,8 @@ RUN curl -L --output /tmp/lnav-0.10.0-musl-64bit.zip \
 RUN echo "ListenAddress 127.0.0.1" > /etc/ssh/sshd_config.d/10-self-login-only.conf && \
     echo "PasswordAuthentication no" >> /etc/ssh/sshd_config.d/10-self-login-only.conf
 
-RUN useradd --no-log-init \
+RUN --mount=type=secret,id=PASSWORD,env=PASSWORD \
+    useradd --no-log-init \
             --create-home \
             --shell /usr/bin/fish \
             --uid ${USER_ID} \
