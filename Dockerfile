@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ubuntu:noble
+FROM ubuntu:resolute
 
 ARG USER_ID=501
 ARG GROUP_ID=20
@@ -50,7 +50,6 @@ RUN apt-get update && \
       lsb-release \
       markdown \
       neovim \
-      npm \
       openconnect \
       openjdk-21-jdk-headless \
       openssh-server \
@@ -74,6 +73,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /root/.cache && \
     chmod +s /usr/sbin/syslog-ng && \
     chmod +s /usr/sbin/sshd
+
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
+    apt-get install --no-install-recommends --quiet --yes \
+      nodejs
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
       gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
