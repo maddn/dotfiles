@@ -50,6 +50,7 @@ RUN apt-get update && \
       npm \
       openconnect \
       openjdk-21-jdk-headless \
+      openssh-server \
       pkg-config \
       python3-dev \
       python3-neovim \
@@ -68,7 +69,8 @@ RUN apt-get update && \
       xmlstarlet \
       xsltproc && \
     rm -rf /var/lib/apt/lists/* /root/.cache && \
-    chmod +s /usr/sbin/syslog-ng
+    chmod +s /usr/sbin/syslog-ng && \
+    chmod +s /usr/sbin/sshd
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
       gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
@@ -90,6 +92,9 @@ RUN curl -L --output /tmp/lnav-0.10.0-musl-64bit.zip \
     https://github.com/tstack/lnav/releases/download/v0.10.0/lnav-0.10.0-musl-64bit.zip && \
     unzip -j /tmp/lnav-0.10.0-musl-64bit.zip lnav-0.10.0/lnav -d /usr/local/bin && \
     rm -rf /tmp/lnav-0.10.0-musl-64bit.zip
+
+RUN echo "ListenAddress 127.0.0.1" > /etc/ssh/sshd_config.d/10-self-login-only.conf && \
+    echo "PasswordAuthentication no" >> /etc/ssh/sshd_config.d/10-self-login-only.conf
 
 RUN useradd --no-log-init \
             --create-home \
