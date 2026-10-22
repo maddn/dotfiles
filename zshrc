@@ -10,6 +10,7 @@ function dev() {
              -v ~/.fish:${BIND_HOME}/.local/share/fish \
              -v /var/run/docker.sock:/run/docker.sock \
              -v /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
+             -v maddn-codex:${BIND_HOME}/.codex \
              -v nso-run:${BIND_HOME}/nso-run \
              -e SSH_AUTH_SOCK="/run/host-services/ssh-auth.sock" \
              -p "${BIND_IP}:8080:8080" \
@@ -25,6 +26,7 @@ function dev() {
              -p "${BIND_IP}:30603:30603" \
              --hostname maddn-dev \
              --cap-add=NET_ADMIN \
+             --security-opt seccomp=unconfined \
              --detach-keys="ctrl-p,ctrl-x" \
              --rm --init -it maddn-dev
 }

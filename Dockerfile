@@ -30,6 +30,7 @@ RUN apt-get update && \
     apt-get install --no-install-recommends --quiet --yes \
       ant \
       autoconf \
+      bubblewrap \
       build-essential \
       curl \
       dosfstools \
@@ -77,6 +78,9 @@ RUN apt-get update && \
 RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
     apt-get install --no-install-recommends --quiet --yes \
       nodejs
+
+RUN npm i -g @openai/codex && \
+    npm cache clean --force
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
       gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
