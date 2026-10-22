@@ -11,6 +11,7 @@ function dev() {
              -v /var/run/docker.sock:/run/docker.sock \
              -v /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
              -v maddn-codex:${BIND_HOME}/.codex \
+             -v maddn-copilot:${BIND_HOME}/.config/github-copilot \
              -v nso-run:${BIND_HOME}/nso-run \
              -e SSH_AUTH_SOCK="/run/host-services/ssh-auth.sock" \
              -p "${BIND_IP}:8080:8080" \
