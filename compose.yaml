@@ -1,0 +1,59 @@
+name: maddn-dev
+
+services:
+  dev:
+    image: maddn-dev
+    container_name: maddn-dev
+    pull_policy: never
+    build:
+      context: .
+      secrets:
+        - PASSWORD
+    hostname: maddn-dev
+    init: true
+    stdin_open: true
+    tty: true
+    healthcheck:
+      test: ["CMD", "tmux", "has-session", "-t", "dev-docker"]
+      interval: 1s
+      timeout: 1s
+      retries: 30
+    network_mode: bridge
+    cap_add:
+      - NET_ADMIN
+    security_opt:
+      - seccomp=unconfined
+    environment:
+      SSH_AUTH_SOCK: /run/host-services/ssh-auth.sock
+    volumes:
+      - ${HOST_HOME}/git:${BIND_HOME}/git
+      - ${HOST_HOME}/nso:${BIND_HOME}/nso:delegated
+      - ${HOST_HOME}/.ssh:${BIND_HOME}/.ssh
+      - ${HOST_HOME}/Downloads:${BIND_HOME}/Downloads
+      - ${HOST_HOME}/.fish:${BIND_HOME}/.local/share/fish
+      - /var/run/docker.sock:/run/docker.sock
+      - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
+      - maddn-codex:${BIND_HOME}/.codex
+      - maddn-copilot:${BIND_HOME}/.config/github-copilot
+    ports:
+      - "${BIND_IP}:8080:8080"    # Local NSO Web UI
+      - "${BIND_IP}:8888:8888"    # Local NSO Web UI SSL
+      - "${BIND_IP}:3000:3000"    # Local Dev Server
+      - "${BIND_IP}:4000:4000"    # Local Proxy
+      - "${BIND_IP}:4001:4001"    # Local Proxy
+      - "${BIND_IP}:13389:13389"  # dCloud RDP tunnel
+      - "${BIND_IP}:18080:18080"  # dCloud NSO Web tunnel
+      - "${BIND_IP}:28080:28080"  # dCloud NSO Web tunnel
+      - "${BIND_IP}:30603:30603"  # dCloud CW UI tunnel
+
+volumes:
+  maddn-codex:
+    name: maddn-codex
+    external: true
+  maddn-copilot:
+    name: maddn-copilot
+    external: true
+
+secrets:
+  PASSWORD:
+    environment: PASSWORD

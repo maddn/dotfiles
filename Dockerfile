@@ -90,7 +90,10 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
       " $(lsb_release -cs) stable" | \
       tee /etc/apt/sources.list.d/docker.list > /dev/null && \
     apt-get update && \
-    apt-get install --no-install-recommends --quiet --yes docker-ce-cli docker-buildx-plugin && \
+    apt-get install --no-install-recommends --quiet --yes \
+      docker-ce-cli \
+      docker-buildx-plugin \
+      docker-compose-plugin && \
     rm -rf /var/lib/apt/lists/* /root/.cache && \
     chmod +s /usr/bin/docker
 
