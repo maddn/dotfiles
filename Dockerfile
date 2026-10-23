@@ -127,6 +127,7 @@ RUN git -C /tmp clone https://github.com/alacritty/alacritty.git && \
     rm -rf /tmp/alacritty
 
 RUN --mount=type=bind,target=git/dotfiles \
+    mkdir -p -m 700 .codex .config/github-copilot .local/share/fish && \
     cd git/dotfiles && make
 
 COPY --chown=${USER_ID}:${GROUP_ID} fish_variables .config/fish
@@ -158,5 +159,8 @@ RUN --mount=type=bind,source=nso-installer,target=nso-installer \
       done; \
       ln -s nso-${NSO_VERSION} ~/nso-current; \
     fi
+
+RUN MANPATH=:/home/${USER_NAME}/nso-current/man \
+    fish --no-config -c fish_update_completions
 
 CMD ["/bin/sh", "/home/mmaddern/.docker_login.sh"]

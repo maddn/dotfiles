@@ -30,11 +30,11 @@ services:
       - ${HOST_HOME}/nso:${BIND_HOME}/nso:delegated
       - ${HOST_HOME}/.ssh:${BIND_HOME}/.ssh
       - ${HOST_HOME}/Downloads:${BIND_HOME}/Downloads
-      - ${HOST_HOME}/.fish:${BIND_HOME}/.local/share/fish
       - /var/run/docker.sock:/run/docker.sock
       - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
       - maddn-codex:${BIND_HOME}/.codex
       - maddn-copilot:${BIND_HOME}/.config/github-copilot
+      - maddn-fish:${BIND_HOME}/.local/share/fish
     ports:
       - "${BIND_IP}:8080:8080"    # Local NSO Web UI
       - "${BIND_IP}:8888:8888"    # Local NSO Web UI SSL
@@ -52,6 +52,9 @@ volumes:
     external: true
   maddn-copilot:
     name: maddn-copilot
+    external: true
+  maddn-fish:
+    name: maddn-fish
     external: true
 
 secrets:

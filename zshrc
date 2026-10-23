@@ -7,7 +7,6 @@ function dev-start() (
   cd "$HOME/git/dotfiles" || return
   source ./.env
   ifconfig lo0 | grep -q "$BIND_IP" || sudo -n /sbin/ifconfig lo0 alias "$BIND_IP"
-  touch ~/.fish_history
   docker compose up --wait --wait-timeout 30 --no-build --no-recreate
 )
 
