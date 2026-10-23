@@ -126,12 +126,13 @@ RUN git -C /tmp clone https://github.com/alacritty/alacritty.git && \
     tic -xe alacritty,alacritty-direct /tmp/alacritty/extra/alacritty.info && \
     rm -rf /tmp/alacritty
 
-COPY --chown=${USER_ID}:${GROUP_ID} / git/dotfiles
-RUN cd git/dotfiles && mkdir -p nso-installer && mv nso-installer ~ && make
+RUN --mount=type=bind,target=git/dotfiles \
+    cd git/dotfiles && make
 
 COPY --chown=${USER_ID}:${GROUP_ID} fish_variables .config/fish
 
-RUN PATH=~/.local/bin:$PATH pip3 install --break-system-packages \
+RUN --mount=type=bind,target=git/dotfiles \
+    PATH=~/.local/bin:$PATH pip3 install --break-system-packages \
       setuptools==81.0.0 \
       docker \
       libvirt-python \
@@ -148,16 +149,14 @@ RUN PATH=~/.local/bin:$PATH pip3 install --break-system-packages \
       telnetlib3 \
       git/dotfiles/pyvxr-ovxr.tar.gz
 
-RUN if [ -n "$(ls -A nso-installer)" ]; then \
+RUN --mount=type=bind,source=nso-installer,target=nso-installer \
+    if [ -n "$(ls nso-installer)" ]; then \
       for NSO_INSTALLER in nso-installer/*; do \
         NSO_VERSION=$(echo ${NSO_INSTALLER} | sed \
           "s/^nso-installer\/nso-\(.*\)\.linux\.${ARCH}\.installer\.bin$/\1/"); \
-        sh ${NSO_INSTALLER} nso-${NSO_VERSION}; \
+        sh ${NSO_INSTALLER} ~/nso-${NSO_VERSION} || exit; \
       done; \
-      ln -s nso-${NSO_VERSION} nso-current; \
-    fi && \
-    rm -rf nso-installer
-
-RUN rm -rf git
+      ln -s nso-${NSO_VERSION} ~/nso-current; \
+    fi
 
 CMD ["/bin/sh", "/home/mmaddern/.docker_login.sh"]
