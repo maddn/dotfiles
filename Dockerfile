@@ -38,12 +38,14 @@ RUN apt-get update && \
       erlang-nox \
       expect \
       fdisk \
+      file \
       fish \
       git \
       gnupg \
       iproute2 \
       iputils-ping \
       iptables \
+      jq \
       less \
       libxml2-utils \
       libvirt-dev \
@@ -130,6 +132,7 @@ RUN cd git/dotfiles && mkdir -p nso-installer && mv nso-installer ~ && make
 COPY --chown=${USER_ID}:${GROUP_ID} fish_variables .config/fish
 
 RUN PATH=~/.local/bin:$PATH pip3 install --break-system-packages \
+      setuptools==81.0.0 \
       docker \
       libvirt-python \
       passlib \
@@ -141,7 +144,9 @@ RUN PATH=~/.local/bin:$PATH pip3 install --break-system-packages \
       pylint \
       pyyaml \
       requests \
-      setproctitle
+      setproctitle \
+      telnetlib3 \
+      git/dotfiles/pyvxr-ovxr.tar.gz
 
 RUN if [ -n "$(ls -A nso-installer)" ]; then \
       for NSO_INSTALLER in nso-installer/*; do \
