@@ -10,7 +10,5 @@ SETUVAR --export LESS_TERMCAP_so:\x1b\x5b90m\x1b\x5b43m
 SETUVAR --export LESS_TERMCAP_ue:\x1b\x5b30m\x1b\x5bm\x0f
 SETUVAR --export LESS_TERMCAP_us:\x1b\x5b32m
 SETUVAR --export LSCOLORS:ExGxFxdaCxDaDahbadachc
-SETUVAR --export TERM:alacritty
 SETUVAR __fish_initialized:3100
 SETUVAR fish_greeting:Welcome\x20to\x20fish\x2c\x20the\x20friendly\x20interactive\x20shell\x0aType\x20\x60help\x60\x20for\x20instructions\x20on\x20how\x20to\x20use\x20fish
-SETUVAR fish_user_paths:/home/mmaddern/\x2elocal/bin

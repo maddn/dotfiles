@@ -77,9 +77,6 @@ RUN apt-get update && \
     chmod +s /usr/sbin/syslog-ng && \
     chmod +s /usr/sbin/sshd
 
-RUN npm i -g @openai/codex && \
-    npm cache clean --force
-
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
       gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
     echo \
@@ -94,12 +91,6 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
       docker-compose-plugin && \
     rm -rf /var/lib/apt/lists/* /root/.cache && \
     chmod +s /usr/bin/docker
-
-RUN git -C /tmp clone https://github.com/hawk/lux.git && cd /tmp/lux && \
-    sed -i 's/^-compile(warnings_as_errors).$/-compile([warnings_as_errors, nowarn_deprecated_catch])./' bin/lux && \
-    autoconf && ./configure && ERLC_FLAGS="+nowarn_deprecated_function +nowarn_deprecated_catch" make && make install && \
-    rm -rf /tmp/lux
-
 
 RUN echo "ListenAddress 127.0.0.1" > /etc/ssh/sshd_config.d/10-self-login-only.conf && \
     echo "PasswordAuthentication no" >> /etc/ssh/sshd_config.d/10-self-login-only.conf
@@ -123,6 +114,17 @@ RUN git -C /tmp clone https://github.com/alacritty/alacritty.git && \
     tic -xe alacritty,alacritty-direct /tmp/alacritty/extra/alacritty.info && \
     rm -rf /tmp/alacritty
 
+ENV PATH=/home/${USER_NAME}/.local/bin:${PATH}
+
+RUN git -C /tmp clone https://github.com/hawk/lux.git && cd /tmp/lux && \
+    sed -i 's/^-compile(warnings_as_errors).$/-compile([warnings_as_errors, nowarn_deprecated_catch])./' bin/lux && \
+    autoconf && ./configure --prefix="$HOME/.local" && ERLC_FLAGS="+nowarn_deprecated_function +nowarn_deprecated_catch" make && make install && \
+    rm -rf /tmp/lux
+
+RUN npm config set prefix ~/.local && \
+    npm i -g @openai/codex && \
+      npm cache clean --force
+
 RUN --mount=type=bind,target=git/dotfiles \
     mkdir -p -m 700 .codex .config/github-copilot .local/share/fish && \
     cd git/dotfiles && make
@@ -130,7 +132,7 @@ RUN --mount=type=bind,target=git/dotfiles \
 COPY --chown=${USER_ID}:${GROUP_ID} fish_variables .config/fish
 
 RUN --mount=type=bind,target=git/dotfiles \
-    PATH=~/.local/bin:$PATH pip3 install --break-system-packages \
+    pip3 install --user --break-system-packages \
       setuptools==81.0.0 \
       docker \
       libvirt-python \
