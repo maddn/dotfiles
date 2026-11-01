@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ubuntu:resolute
+FROM ubuntu:stonking
 
 ARG USER_ID=501
 ARG GROUP_ID=20
@@ -30,7 +30,6 @@ RUN apt-get update && \
     apt-get install --no-install-recommends --quiet --yes \
       ant \
       autoconf \
-      bubblewrap \
       build-essential \
       curl \
       dosfstools \
@@ -53,15 +52,16 @@ RUN apt-get update && \
       lsb-release \
       markdown \
       neovim \
+      npm \
       openconnect \
       openjdk-21-jdk-headless \
+      openssh-client \
       openssh-server \
       pkg-config \
       python3-dev \
       python3-neovim \
       python-is-python3 \
       python3-pip \
-      ssh-client \
       sudo \
       syslog-ng \
       tcpdump \
@@ -76,10 +76,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /root/.cache && \
     chmod +s /usr/sbin/syslog-ng && \
     chmod +s /usr/sbin/sshd
-
-RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
-    apt-get install --no-install-recommends --quiet --yes \
-      nodejs
 
 RUN npm i -g @openai/codex && \
     npm cache clean --force
@@ -100,7 +96,8 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
     chmod +s /usr/bin/docker
 
 RUN git -C /tmp clone https://github.com/hawk/lux.git && cd /tmp/lux && \
-    autoconf && ./configure && make && make install && \
+    sed -i 's/^-compile(warnings_as_errors).$/-compile([warnings_as_errors, nowarn_deprecated_catch])./' bin/lux && \
+    autoconf && ./configure && ERLC_FLAGS="+nowarn_deprecated_function +nowarn_deprecated_catch" make && make install && \
     rm -rf /tmp/lux
 
 
@@ -149,6 +146,9 @@ RUN --mount=type=bind,target=git/dotfiles \
       setproctitle \
       telnetlib3 \
       git/dotfiles/pyvxr-ovxr.tar.gz
+
+# Avoid pyang's Python 3.14-incompatible module discovery (pkgutil.find_loader).
+ENV YANG_INSTALL=/home/${USER_NAME}/.local/share
 
 RUN --mount=type=bind,source=nso-installer,target=nso-installer \
     if [ -n "$(ls nso-installer)" ]; then \

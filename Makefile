@@ -13,6 +13,7 @@ DOT_FILES = \
 	.config/fish/functions/fish_default_mode_prompt.fish \
 	.config/fish/functions/fish_mode_prompt.fish \
 	.config/fish/functions/fish_prompt.fish \
+	.config/fish/themes/maddn.theme \
 	.config/lnav/formats/installed/lnav_formats.json \
 	.config/lnav/configs/installed/lnav_theme.json \
 	.config/pygments/maddn.py \
