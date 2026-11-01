@@ -42,7 +42,10 @@ set showmode
 set ruler
 
 "Editing text
-set completeopt+=longest
+set completeopt-=longest
+set completeopt+=noselect
+set autocomplete
+set complete+=o
 set showmatch
 set nojoinspaces
 
@@ -61,6 +64,10 @@ set visualbell t_vb=
 
 "Files
 set viminfo+=n~/.vim/viminfo
+set autoread
+
+"Diagnostics
+lua vim.diagnostic.config({ virtual_lines = { current_line = true } })
 
 
 "------------------------------------------------------------------------------
@@ -83,29 +90,6 @@ set clipboard=unnamed
 if has("gui_running")
   set transparency=7
 endif
-
-
-"------------------------------------------------------------------------------
-"--Status line
-"------------------------------------------------------------------------------
-
-"Set the left side of the status line
-"------------------------------------
-set statusline=\ [Buf:\ %n]                                     "Buffer number
-set statusline+=\ %F%<                                          "File name and path
-set statusline+=\ [%{empty(&filetype)?'':&filetype.'\ \|\ '}    "File type
-set statusline+=\%{empty(&fileformat)?'':&fileformat.':'}       "File format
-set statusline+=%{&fenc!=''?&fenc:&enc}]                        "File encoding
-set statusline+=\ [%{&l:expandtab?'Spaces':'Tabs'}]             "Tabs / Spaces
-set statusline+=\ %h%w%m%r                                      "Help / Preview / Modified / Readonly
-set statusline+=\%{fugitive#statusline()}                       "Fugutive plugin
-
-"Set the right side of the status line
-"-------------------------------------
-set statusline+=%=\ %#warningmsg#                               "Synastic plugin
-set statusline+=%{SyntasticStatuslineFlag()}                    "Syntasic plugin
-set statusline+=%*                                              "Syntasic plugin
-set statusline+=\ %=[0x%B]\ [Line:\ %l/%L\ \|\ Col:\ %c%V]\ (%P)
 
 
 "------------------------------------------------------------------------------
@@ -143,7 +127,8 @@ nmap ZZ :qa<CR>
 
 "Plugin shortcuts
 nmap <Leader>nt :NERDTreeToggle<CR>
-nmap <Leader>q :Bdelete<CR>
+nmap <Leader>q :lua require('mini.bufremove').delete()<CR>
+nmap <Leader>hp :Gitsigns preview_hunk<CR>
 
 "Zoom window
 nmap <Leader>a :ZoomToggle<CR>
@@ -162,26 +147,8 @@ cmap xmllint :silent 1,$!xmllint --format --recover - 2>/dev/null
 "NERDTree
 let g:NERDTreeShowBookmarks=1
 
-"Synastic
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_java_checkers = ["javac"]
-let g:syntastic_javascript_eslint_generic=1
-let g:syntastic_javascript_eslint_exe="npx eslint"
-let g:syntastic_javascript_eslint_exec="/bin/ls"
-let g:syntastic_javascript_eslint_args='--format compact'
-let g:syntastic_javascript_checkers = ["eslint"]
-let g:syntastic_javascript_closurecompiler_script = "closure-compiler"
-let g:syntastic_python_checkers = ["pylint"]
-let g:syntastic_yang_pyang_exe = "~/.local/bin/pyang"
-let g:syntastic_yang_pyang_args =
-  \ "--path=$NCS_DIR/src/ncs/yang --canonical --ignore-error=MODULE_NOT_FOUND"
-let g:syntastic_filetype_map = { "javascriptreact": "javascript" }
-
-"JSX
-let g:jsx_ext_required = 0
+"Signature help
+lua require('lsp_signature').setup()
 
 "Airline
 let g:airline#extensions#tabline#enabled = 1
@@ -190,9 +157,18 @@ let g:airline_theme="maddn_airline"
 let g:airline_powerline_fonts = 1
 let g:tmuxline_preset = 'full'
 
-"ALE
-"let g:ale_lint_on_text_changed = 'never'
-"let g:ale_lint_on_insert_leave = 0
+"Count diagnostics from both language servers and nvim-lint.
+function! AirlineDiagnostics(severity)
+  let diagnostics = v:lua.vim.diagnostic.get(0, {'severity': a:severity})
+  return empty(diagnostics) ? '' : a:severity[0] . ':' . len(diagnostics) .
+        \ '(L' . (diagnostics[0].lnum + 1) . ')'
+endfunction
+
+let g:airline_section_error = '%{AirlineDiagnostics("Error")}'
+let g:airline_section_warning = '%{join(filter([' .
+      \ 'AirlineDiagnostics("Warn"), airline#extensions#whitespace#check()], ' .
+      \ '"!empty(v:val)"), " ")}'
+let g:airline_section_z = '%p%% %l:%c'
 
 
 "------------------------------------------------------------------------------
@@ -256,26 +232,6 @@ command! Tabs setlocal noexpandtab | call s:HighlightSpaces()
 "--Other useful functions
 "------------------------------------------------------------------------------
 
-" Set classpath to find jars in NSO package structure
-function! s:SetJavaClasspath()
-  if expand('%:e') == 'java'
-    let javapath = "./"
-    let depth = 1
-    while depth < 12 && !empty(glob(javapath))
-      if !empty(glob(javapath . '/src'))
-        let g:syntastic_java_javac_classpath =
-            \ $NCS_DIR . '/java/jar/*.jar:' .
-            \ javapath . 'build/classes:' .
-            \ javapath  . '../../private-jar/*.jar:' .
-            \ javapath . '../../shared-jar/*.jar'
-        return
-      endif
-      let depth += 1
-      let javapath = "../" . javapath
-    endwhile
-  endif
-endfunction
-
 "Make with Makefile in a parent directory
 function! s:SetMkfile()
   let filemk = "Makefile"
@@ -310,8 +266,19 @@ command! ZoomToggle call s:ZoomToggle()
 
 "Run 'pyang --format tree' on input file(s) and output in new split
 function! s:PyangTree(files)
+  let mkpath = s:SetMkfile()
+  let paths = systemlist('make --no-print-directory --silent -C ' . mkpath .
+        \ ' -f Makefile -f - vim-yangpath',
+        \ ".PHONY: vim-yangpath\n" .
+        \ "vim-yangpath:\n" .
+        \ "\t@printf '%s\\n' $(abspath $(YANGPATH))\n")
+  if v:shell_error
+    echoerr join(paths, "\n")
+    return
+  endif
+  let yangpath = $NCS_DIR . '/src/ncs/yang:' . join(paths, ':')
   vnew
-  silent execute 'read !~/.local/bin/pyang --format tree --path $NCS_DIR/src/ncs/yang ' . a:files
+  silent execute 'read !~/.local/bin/pyang --format tree --path ' . shellescape(yangpath) . ' ' . a:files
   1
 endfunction
 
@@ -337,23 +304,12 @@ command! PyangTreeWithAugments call s:PyangTreeWithAugments()
 augroup general
   autocmd!
 
+  "Reload externally edited files.
+  autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * checktime
+
   "Automatically open the quickfix window on :make
   autocmd QuickFixCmdPost [^l]* nested belowright cwindow
   autocmd QuickFixCmdPost l* nested belowright lwindow
-
-  "Large files
-  autocmd BufReadPre *
-        \ if getfsize(expand("<afile>")) > 1024*1024 |
-        \   let b:syntastic_mode="passive" |
-        \ endif
-
-  "Copy to terminal
-  autocmd TextYankPost *
-        \ if v:event.operator is 'y' && v:event.regname is '' |
-        \   if exists(':OSCYankRegister') |
-        \     execute 'OSCYankRegister "' |
-        \   endif |
-        \ endif
 
   "Display NERDTree if Vim is being opened without a file
   if bufname('%') == ''
@@ -370,12 +326,6 @@ augroup end
 
 augroup filetypes
   autocmd!
-
-  "Set PL/SQL filetypes
-  autocmd BufNewFile,BufRead *.pkh,*.pkb,*.pls,*.pks
-        \ set filetype=sql | SQLSetType plsqlvorax
-  autocmd BufNewFile,BufRead *.ddl,*.sqlpart,*.sql,*.grt
-        \ set filetype=sql | SQLSetType sqlvorax
 
   "PL/SQL
   autocmd FileType sql,plsql
@@ -394,7 +344,6 @@ augroup filetypes
   "Java Make errorformat output as Ant
   autocmd FileType java
         \ set errorformat=\ %#[javac]\ %#%f:%l:%c:%*\\d:%*\\d:\ %t%[%^:]%#:%m,\%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%# |
-        \ call s:SetJavaClasspath()
 
   "Markdown filetypes
   autocmd FileType markdown
@@ -442,3 +391,117 @@ augroup whitespace
         \  endif
   autocmd BufWinEnter * call s:SetupWindow()
 augroup end
+
+
+"Start tree-sitter highlighting for certain filetypes.
+lua << EOF
+  vim.api.nvim_create_autocmd('FileType', {
+    group = vim.api.nvim_create_augroup('treesitter_highlighting', { clear = true }),
+    pattern = { 'javascript', 'javascriptreact', 'python', 'yang' },
+    callback = function(ev)
+      vim.treesitter.start(ev.buf)
+    end
+  })
+EOF
+
+
+"Auto lint files on save and open.
+lua << EOF
+  require('lint').linters_by_ft = {
+    python = {'pylint'}, sh = {'shellcheck'}, fish = {'fish'}
+  }
+
+  vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost' }, {
+    group = vim.api.nvim_create_augroup('lint', { clear = true }),
+    callback = function()
+      require('lint').try_lint()
+    end
+  })
+EOF
+
+
+"Preserve symlink paths so LSP files stay in the consuming project.
+lua << EOF
+  local original_uri = require('vim.uri').uri_from_bufnr
+  local symlink_paths = vim.api.nvim_create_augroup('lsp_symlink_paths', { clear = true })
+
+  vim.api.nvim_create_autocmd({ 'BufAdd', 'BufFilePost' }, {
+    group = symlink_paths,
+    callback = function(ev)
+      local name = vim.fn.bufname(ev.buf)
+      if name ~= '' then
+        vim.b[ev.buf].lsp_original_path = vim.fn.fnamemodify(name, ':p')
+      end
+    end
+  })
+
+  vim.uri_from_bufnr = function(bufnr)
+    bufnr = bufnr == 0 and vim.api.nvim_get_current_buf() or bufnr
+    local path = vim.b[bufnr].lsp_original_path
+    if path and vim.bo[bufnr].buftype == '' then
+      return vim.uri_from_fname(path)
+    end
+    return original_uri(bufnr)
+  end
+EOF
+
+
+"------------------------------------------------------------------------------
+"--Language servers
+"------------------------------------------------------------------------------
+
+lua << EOF
+  vim.lsp.config('yang_lsp', {
+    root_markers = { 'Makefile', '.git' }
+  })
+
+  vim.lsp.config('lemminx', {
+    settings = { xml = { validation = { noGrammar = 'ignore' } } }
+  })
+
+  vim.lsp.config('make_ls', {
+    cmd = { 'make-ls' },
+    filetypes = { 'make' },
+    root_markers = { 'Makefile', '.git' }
+  })
+
+  vim.lsp.config('tsc', {
+    -- Use root_dir function to preserve symlink paths.
+    root_dir = function(bufnr, on_dir)
+      local path = vim.uri_to_fname(vim.uri_from_bufnr(bufnr))
+      local root = vim.fs.root(path, {
+        'tsconfig.json',
+        'jsconfig.json',
+        'package.json',
+        '.git'
+      })
+
+      -- Support standalone files by falling back to the current directory.
+      on_dir(root or vim.fn.getcwd())
+    end
+  })
+
+  vim.lsp.config('eslint', {
+    -- Use root_dir function to preserve symlink paths.
+    root_dir = function(bufnr, on_dir)
+      local path = vim.uri_to_fname(vim.uri_from_bufnr(bufnr))
+      local root = vim.fs.root(path, {
+        'eslint.config.mjs',
+        'eslint.config.js',
+        'eslint.config.cjs',
+        'package.json',
+        '.git'
+      })
+
+      -- Start ESLint only when a project root is found.
+      if root then
+        on_dir(root)
+      end
+    end
+  })
+
+  vim.lsp.enable({
+    'pyright', 'tsc', 'eslint', 'cssls', 'jsonls',
+    'yang_lsp', 'lemminx', 'yamlls', 'make_ls',
+  })
+EOF

@@ -62,6 +62,7 @@ RUN apt-get update && \
       python3-neovim \
       python-is-python3 \
       python3-pip \
+      shellcheck \
       sudo \
       syslog-ng \
       tcpdump \
