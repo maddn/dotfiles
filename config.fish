@@ -1,5 +1,6 @@
 fish_config theme choose maddn
 set --global fish_key_bindings fish_vi_key_bindings
+set --global --export LS_COLORS (dircolors -b ~/.dircolors | string split "'")[2]
 
 alias ncs 'ncs --nolog'
 alias cli 'ncs_cli -u admin -C'

@@ -1,14 +1,12 @@
 ARCH ?= arm64
 
 DOT_FILES = \
-	.alacritty.yml \
+	.alacritty.toml \
 	.bash_profile \
-	.dircolors \
 	.docker_login.sh \
 	.gitconfig \
 	.pylintrc \
 	.tmux.conf \
-	.tmuxline.conf \
 	.zshrc \
 	.yang/yang.settings \
 	.config/fish/config.fish \
@@ -16,34 +14,36 @@ DOT_FILES = \
 	.config/fish/functions/fish_default_mode_prompt.fish \
 	.config/fish/functions/fish_mode_prompt.fish \
 	.config/fish/functions/fish_prompt.fish \
-	.config/fish/themes/maddn.theme \
 	.config/lnav/formats/installed/lnav_formats.json \
-	.config/lnav/configs/installed/lnav_theme.json \
-	.config/pygments/maddn.py \
 	.config/vifm/vifmrc \
-	.config/vifm/colors/maddn.vifm \
-	.docker/config.json
+	.docker/config.json \
+	.config/nvim/init.vim
 
-ifeq (, $(shell which nvim))
-VIM_PACK = $(HOME)/.vim/pack
-DOT_FILES += \
-	.vim/vimrc \
-	.vim/colors/maddn.vim \
-	.vim/pack/plugin/start/vim-airline/autoload/airline/themes/maddn_airline.vim
-else
 VIM_PACK = $(HOME)/.local/share/nvim/site/pack
-DOT_FILES += \
-	.config/nvim/init.vim \
-	.config/nvim/colors/maddn.vim \
-	.local/share/nvim/site/pack/plugin/start/vim-airline/autoload/airline/themes/maddn_airline.vim
-endif
+VIM_START = .local/share/nvim/site/pack/plugin/start
+
+THEME_DOT_FILES = \
+	.dircolors \
+	.tmuxline.conf \
+	.codex/themes/maddn.tmTheme \
+	.config/fish/themes/maddn.theme \
+	.config/lnav/configs/installed/lnav.json \
+	.config/pygments/pygments_formatter.py \
+	.config/vifm/colors/maddn.vifm \
+	$(VIM_START)/tinted-nvim/colors/tinted8-maddn.vim \
+	$(VIM_START)/tinted-nvim/lua/tinted-nvim/palettes/tinted8-maddn.lua \
+	$(VIM_START)/tinted-nvim/lua/tinted-nvim/highlights/nvim-overrides.lua \
+	$(VIM_START)/vim-airline/autoload/airline/themes/maddn.vim
 
 TARGET_FILES = $(DOT_FILES:%=$(HOME)/%)
+THEME_TARGET_FILES = $(THEME_DOT_FILES:%=$(HOME)/%)
+
 
 .DELETE_ON_ERROR:
-.PHONY: all vim treesitter fish vim-helptags clean
+.PHONY: all vim treesitter fish vim-helptags clean theme theme-install-tools
 
-all: vim $(TARGET_FILES) fish vim-helptags
+all: vim $(TARGET_FILES) $(THEME_TARGET_FILES) fish vim-helptags \
+	theme-install-tools
 
 
 ## Vim ##
@@ -65,6 +65,7 @@ vim: $(VIM_PACK_NAMES:%=$(VIM_PACK)/%/start) $(NPM_LSP) treesitter \
 $(VIM_PACK)/plugin/start:
 	[ -d $@ ] || mkdir -p $@
 	git -C $@ clone https://github.com/vim-airline/vim-airline.git
+	git -C $@ clone https://github.com/tinted-theming/tinted-nvim.git
 	git -C $@ clone https://github.com/nvim-mini/mini.bufremove.git
 	git -C $@ clone https://github.com/tpope/vim-fugitive.git
 	git -C $@ clone https://github.com/lewis6991/gitsigns.nvim.git
@@ -80,6 +81,7 @@ $(VIM_PACK)/syntax/start:
 $(VIM_PACK)/tmux/start:
 	[ -d $@ ] || mkdir -p $@
 	git -C $@ clone https://github.com/edkolev/tmuxline.vim.git
+	git -C $@/tmuxline.vim apply $(CURDIR)/theme/tmuxline.patch
 	git -C $@ clone https://github.com/christoomey/vim-tmux-navigator.git
 
 $(VIM_PACK)/github/start:
@@ -143,7 +145,6 @@ FISH = $(HOME)/.config/fish
 BASS = $(FISH)/functions/bass.fish $(FISH)/functions/__bass.py
 
 fish: $(BASS)
-	#fish -c fish_update_completions
 
 $(BASS) &:
 	[ -d $(@D) ] || mkdir -p $(@D)
@@ -152,14 +153,40 @@ $(BASS) &:
 	rm -rf /tmp/bass
 
 
+## Themes ##
+
+theme:
+	$(MAKE) -C theme
+
+theme-install-tools:
+	$(MAKE) -C theme install-tools
+
+
+## Clean Up ##
+
 clean:
-	rm -f $(TARGET_FILES)
+	rm -f $(TARGET_FILES) $(THEME_TARGET_FILES)
 	rm -f $(BASS)
 	rm -rf $(VIM_PACK_NAMES:%=$(VIM_PACK)/%)
 
 
+## Symlink Creation ##
+
+# The generated files may not exist yet.
+# Allow the symlinks to be created even with the missing source files.
+theme/generated/%: ;
+
+$(HOME)/.config/nvim/init.vim: vimrc
+
 .SECONDEXPANSION:
 
-$(TARGET_FILES): $$(patsubst init.vim,vimrc,$$(patsubst .%,%,$$(@F)))
+# Use the basename when no explicit source mapping is declared above.
+$(TARGET_FILES): $$(if $$<,,$$(patsubst .%,%,$$(@F)))
+$(THEME_TARGET_FILES): \
+	$$(or \
+	  $$(wildcard theme/static/$$(patsubst .%,%,$$(@F))),\
+	  theme/generated/$$(patsubst .%,%,$$(@F)))
+
+$(TARGET_FILES) $(THEME_TARGET_FILES):
 	[ -d $(@D) ] || mkdir -p $(@D)
 	ln -s $(CURDIR)/$< $@

@@ -1,0 +1,78 @@
+# Alacritty theme.
+# Generated from theme/palette.env.
+
+# Default colors
+[colors.primary]
+background = '0x${BACKGROUND}'
+foreground = '0x${FOREGROUND}'
+
+# Cursor colors
+[colors.cursor]
+text = '0x${BACKGROUND}'
+cursor = '0x${FOREGROUND}'
+
+# Normal colors
+[colors.normal]
+black = '0x${BACKGROUND}'
+red = '0x${RED}'
+green = '0x${GREEN}'
+yellow = '0x${YELLOW}'
+blue = '0x${BLUE}'
+magenta = '0x${MAGENTA}'
+cyan = '0x${CYAN}'
+white = '0x${FOREGROUND}'
+
+# Bright colors
+[colors.bright]
+black = '0x${SUBDUED}'
+red = '0x${RED}'
+green = '0x${GREEN}'
+yellow = '0x${YELLOW}'
+blue = '0x${BLUE}'
+magenta = '0x${MAGENTA}'
+cyan = '0x${CYAN}'
+white = '0x${FOREGROUND}'
+
+[[colors.indexed_colors]]
+index = 16
+color = "0x${ORANGE}"
+
+[[colors.indexed_colors]]
+index = 17
+color = "0x${BROWN}"
+
+[[colors.indexed_colors]]
+index = 18
+color = "0x${RAISED}"
+
+[[colors.indexed_colors]]
+index = 19
+color = "0x${CHROME}"
+
+[[colors.indexed_colors]]
+index = 20
+color = "0x${HIGHLIGHT}"
+
+[[colors.indexed_colors]]
+index = 21
+color = "0x${INACTIVE}"
+
+[[colors.indexed_colors]]
+index = 22
+color = '#${BLACK}'
+
+[[colors.indexed_colors]]
+index = 23
+color = '#${CURSOR_LINE}'
+
+[[colors.indexed_colors]]
+index = 24
+color = '#${DIM_GREEN}'
+
+[[colors.indexed_colors]]
+index = 25
+color = '#${DIM_RED}'
+
+[[colors.indexed_colors]]
+index = 26
+color = '#${DIM_BLUE}'

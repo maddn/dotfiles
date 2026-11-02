@@ -2,11 +2,11 @@
 # VERSION: 3.0
 SETUVAR --export CLICOLOR:1
 SETUVAR --export LESS:\x2dR
-SETUVAR --export LESSOPEN:\x7c\x20pygmentize\x20\x2df\x20\x7e/\x2econfig/pygments/maddn\x2epy\x20\x2dx\x20\x2dg\x20\x25s
+SETUVAR --export LESSOPEN:\x7c\x20pygmentize\x20\x2df\x20\x7e/\x2econfig/pygments/pygments_formatter\x2epy\x20\x2dx\x20\x2dg\x20\x25s
 SETUVAR --export LESS_TERMCAP_mb:\x1b\x5b31m
 SETUVAR --export LESS_TERMCAP_md:\x1b\x5b34m
 SETUVAR --export LESS_TERMCAP_se:\x1b\x5b30m\x1b\x5bm\x0f
-SETUVAR --export LESS_TERMCAP_so:\x1b\x5b90m\x1b\x5b43m
+SETUVAR --export LESS_TERMCAP_so:\x1b\x5b30m\x1b\x5b43m
 SETUVAR --export LESS_TERMCAP_ue:\x1b\x5b30m\x1b\x5bm\x0f
 SETUVAR --export LESS_TERMCAP_us:\x1b\x5b32m
 SETUVAR --export LSCOLORS:ExGxFxdaCxDaDahbadachc

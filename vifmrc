@@ -66,6 +66,8 @@ set norunexec
 
 colorscheme maddn.vifm
 
+set fillchars+=vborder:│
+
 " Format for displaying time in file list. For example:
 " TIME_STAMP_FORMAT=%m/%d-%H:%M
 " See man date or man strftime for details.
@@ -354,7 +356,7 @@ filextype */
 "
 " Or leave it for automatic detection
 "
-fileviewer *[^/] pygmentize -f ~/.config/pygments/maddn.py -x -g
+fileviewer *[^/] pygmentize -f ~/.config/pygments/pygments_formatter.py -x -g
 
 " Displaying pictures in terminal
 "

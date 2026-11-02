@@ -1,3 +1,4 @@
 .DS_Store
 nso-installer/nso-*.linux.*.installer.bin
-ca-certificates
+ca-certificates/
+theme/generated/

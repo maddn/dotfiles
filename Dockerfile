@@ -39,6 +39,7 @@ RUN apt-get update && \
       fdisk \
       file \
       fish \
+      gettext-base \
       git \
       gnupg \
       iproute2 \
@@ -96,6 +97,18 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
 RUN echo "ListenAddress 127.0.0.1" > /etc/ssh/sshd_config.d/10-self-login-only.conf && \
     echo "PasswordAuthentication no" >> /etc/ssh/sshd_config.d/10-self-login-only.conf
 
+# lnav's terminfo parser cannot handle character constants in indexed-colour commands.
+RUN git -C /tmp clone https://github.com/alacritty/alacritty.git && \
+    tic -xe alacritty,alacritty-direct -o /usr/share/terminfo \
+      /tmp/alacritty/extra/alacritty.info && \
+    rm -rf /tmp/alacritty && \
+    for TERM_NAME in alacritty screen-256color tmux-256color; do \
+      infocmp -x "$TERM_NAME" | \
+        sed -e 's/setaf=[^,]*,/setaf=\\E[38;5;%p1%dm,/' \
+            -e 's/setab=[^,]*,/setab=\\E[48;5;%p1%dm,/' | \
+        tic -x -o /usr/share/terminfo - || exit; \
+    done
+
 RUN --mount=type=secret,id=PASSWORD,env=PASSWORD \
     useradd --no-log-init \
             --create-home \
@@ -110,10 +123,6 @@ RUN --mount=type=secret,id=PASSWORD,env=PASSWORD \
 
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
-
-RUN git -C /tmp clone https://github.com/alacritty/alacritty.git && \
-    tic -xe alacritty,alacritty-direct /tmp/alacritty/extra/alacritty.info && \
-    rm -rf /tmp/alacritty
 
 ENV PATH=/home/${USER_NAME}/.local/bin:${PATH}
 

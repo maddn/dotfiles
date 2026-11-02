@@ -1,0 +1,6 @@
+codex-overrides.json:
+  filename: "../../../../../.local/share/tinted-theming/tinted-vscode/themes/tinted8/codex-overrides.json"
+  supported-systems: [tinted8]
+  supports:
+    tinted8-styling: "~0.2.0"
+    tinted8-builder: "~0.2.0"

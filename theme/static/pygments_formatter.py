@@ -1,3 +1,5 @@
+# Pygments formatter using terminal palette colours.
+
 from pygments.formatters.terminal import TerminalFormatter
 from pygments.token import Keyword, Name, Comment, String, Error, \
     Number, Operator, Generic, Token, Whitespace
@@ -5,19 +7,21 @@ from pygments.token import Keyword, Name, Comment, String, Error, \
 TERMINAL_COLORS = {
     Token:              ('',        ''),
 
-    Whitespace:         ('grey',    'grey'),
+    Whitespace:         ('gray',    'gray'),
     Comment:            ('cyan',    'cyan'),
     Comment.Preproc:    ('magenta', 'magenta'),
     Keyword:            ('blue',    'blue'),
+    Keyword.Constant:   ('red',     'red'),
     Keyword.Type:       ('green',   'green'),
     Operator.Word:      ('red',     'red'),
-    Name.Builtin:       ('cyan',    'cyan'),
+    Name.Builtin:       ('green',   'green'),
+    Name.Builtin.Pseudo: ('gray',   'gray'),
     Name.Function:      ('green',   'green'),
-    Name.Namespace:     ('yellow',    'cyan'),
+    Name.Namespace:     ('green',   'green'),
     Name.Class:         ('green',   'green'),
     Name.Exception:     ('magenta', 'magenta'),
     Name.Decorator:     ('magenta', 'magenta'),
-    Name.Variable:      ('green',   'green'),
+    Name.Variable:      ('gray',    'gray'),
     Name.Constant:      ('red',     'red'),
     Name.Attribute:     ('green',   'green'),
     Name.Tag:           ('blue',    'blue'),

@@ -7,7 +7,24 @@ set shell=/bin/bash
 "------------------------------------------------------------------------------
 filetype plugin on
 syntax enable
-colorscheme maddn
+
+
+"------------------------------------------------------------------------------
+"--Color scheme
+"------------------------------------------------------------------------------
+"
+lua << EOF
+  require('tinted-nvim').setup({
+    default_scheme = 'tinted8-maddn',
+    highlights = {
+      overrides = function()
+        return dofile(vim.api.nvim_get_runtime_file(
+          'lua/tinted-nvim/highlights/nvim-overrides.lua', false
+        )[1])
+      end,
+    },
+  })
+EOF
 
 
 "------------------------------------------------------------------------------
@@ -151,11 +168,18 @@ let g:NERDTreeShowBookmarks=1
 lua require('lsp_signature').setup()
 
 "Airline
+let g:airline#extensions#tmuxline#enabled = 0
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline_theme="maddn_airline"
+let g:airline_theme="maddn"
 let g:airline_powerline_fonts = 1
-let g:tmuxline_preset = 'full'
+let g:airline_right_alt_sep = ''
+let g:airline_skip_empty_sections = 1
+let g:airline#extensions#default#layout = [
+      \ ['a', 'b', 'c'],
+      \ ['x', 'warning', 'error', 'y', 'z']
+      \ ]
+let g:airline#extensions#whitespace#symbol = ''
 
 "Count diagnostics from both language servers and nvim-lint.
 function! AirlineDiagnostics(severity)
@@ -343,7 +367,7 @@ augroup filetypes
 
   "Java Make errorformat output as Ant
   autocmd FileType java
-        \ set errorformat=\ %#[javac]\ %#%f:%l:%c:%*\\d:%*\\d:\ %t%[%^:]%#:%m,\%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%# |
+        \ set errorformat=\ %#[javac]\ %#%f:%l:%c:%*\\d:%*\\d:\ %t%[%^:]%#:%m,\%A\ %#[javac]\ %f:%l:\ %m,%-Z\ %#[javac]\ %p^,%-C%.%#
 
   "Markdown filetypes
   autocmd FileType markdown

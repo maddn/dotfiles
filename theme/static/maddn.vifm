@@ -1,18 +1,24 @@
+" Vifm theme using terminal palette colours.
+" Based on Vifm's Default-256 theme.
+" Slots 18 and 19 provide the raised background and structural chrome.
+
+highlight clear
+
 highlight Win             cterm=none      ctermfg=white     ctermbg=default
-highlight Border          cterm=none      ctermfg=default   ctermbg=default
+highlight Border          cterm=none      ctermfg=19        ctermbg=default
 
-highlight TopLine         cterm=none      ctermfg=white     ctermbg=8
-highlight TopLineSel      cterm=none      ctermfg=yellow    ctermbg=8
+highlight TopLine         cterm=none      ctermfg=white     ctermbg=18
+highlight TopLineSel      cterm=none      ctermfg=yellow    ctermbg=18
 
-highlight StatusLine      cterm=none      ctermfg=yellow    ctermbg=8
+highlight StatusLine      cterm=none      ctermfg=yellow    ctermbg=18
 highlight WildMenu        cterm=reverse   ctermfg=default   ctermbg=default
 
 highlight CmdLine         cterm=none      ctermfg=white     ctermbg=default
 highlight ErrorMsg        cterm=none      ctermfg=red       ctermbg=default
 
-highlight Selected        cterm=none      ctermfg=red       ctermbg=8
-highlight CurrLine        cterm=none      ctermfg=black     ctermbg=blue
-highlight OtherLine       cterm=none      ctermfg=white     ctermbg=8
+highlight Selected        cterm=none      ctermfg=red       ctermbg=18
+highlight CurrLine        cterm=none      ctermfg=black     ctermbg=yellow
+highlight OtherLine       cterm=none      ctermfg=white     ctermbg=18
 
 highlight BrokenLink      cterm=bold      ctermfg=red       ctermbg=black
 highlight Device          cterm=bold      ctermfg=yellow    ctermbg=black
@@ -21,29 +27,85 @@ highlight Executable      cterm=bold      ctermfg=green     ctermbg=default
 highlight Fifo            cterm=none      ctermfg=yellow    ctermbg=black
 highlight Link            cterm=bold      ctermfg=cyan      ctermbg=default
 highlight Socket          cterm=bold      ctermfg=magenta   ctermbg=default
+highlight HardLink        cterm=bold      ctermfg=yellow    ctermbg=default
 
+highlight OtherWin        cterm=none      ctermfg=default   ctermbg=default
+highlight AuxWin          cterm=none      ctermfg=default   ctermbg=18
+highlight OddLine                         ctermfg=default   ctermbg=default
+
+highlight TabLine         cterm=none      ctermfg=white     ctermbg=black
+highlight TabLineSel      cterm=bold,reverse ctermfg=default ctermbg=default
+
+highlight JobLine         cterm=bold      ctermfg=white     ctermbg=18
+
+highlight LineNr                          ctermfg=default   ctermbg=default
+
+highlight CmpMismatch     cterm=bold      ctermfg=black     ctermbg=red
+highlight CmpUnmatched    cterm=bold      ctermfg=black     ctermbg=green
+highlight CmpBlank                        ctermfg=default   ctermbg=default
+
+highlight SuggestBox      cterm=none      ctermfg=white     ctermbg=18
+
+
+highlight column:uname ctermfg=lightblack
+highlight column:gname ctermfg=lightblack
+highlight column:perms ctermfg=lightblack
+highlight column:mtime ctermfg=lightblack
+highlight column:size  ctermfg=yellow
+
+
+" build system files
+highlight {Makefile,Makefile.am,Makefile.in,Makefile.win,*.mak,*.mk,*.m4,*.ac,
+          \configure,CMakeLists.txt,*.cmake,*.pro,*.pri,*.sln,meson.build,
+          \meson_options.txt}
+        \ cterm=none ctermfg=green ctermbg=default
 " archives
-highlight /.*\.7z$|.*\.ace$|.*\.alz$|.*\.arc$|.*\.arj$|.*\.bz$|.*\.bz2$|
-          \.*\.cab$|.*\.cpio$|.*\.deb$|.*\.dwm$|.*\.dz$|.*\.ear$|.*\.esd$|
-          \.*\.gz$|.*\.jar$|.*\.lha$|.*\.lrz$|.*\.lz$|.*\.lz4$|.*\.lzh$|
-          \.*\.lzma$|.*\.lzo$|.*\.rar$|.*\.rpm$|.*\.rz$|.*\.sar$|.*\.swm$|
-          \.*\.t7z$|.*\.tar$|.*\.taz$|.*\.tbz$|.*\.tbz2$|.*\.tgz$|.*\.tlz$|
-          \.*\.txz$|.*\.tz$|.*\.tzo$|.*\.tzst$|.*\.war$|.*\.wim$|.*\.xz$|
-          \.*\.z$|.*\.zip$|.*\.zoo$|.*\.zst$/I
+highlight {*.7z,*.ace,*.arj,*.bz2,*.cpio,*.deb,*.dz,*.gz,*.jar,*.lzh,*.lzma,
+          \*.rar,*.rpm,*.rz,*.tar,*.taz,*.tb2,*.tbz,*.tbz2,*.tgz,*.tlz,*.trz,
+          \*.txz,*.tz,*.tz2,*.tzst,*.xz,*.z,*.zip,*.zoo,*.apk,*.gzip,*.lz,
+          \*.zstd}
+        \ cterm=none ctermfg=yellow ctermbg=default
+" configuration and other readable textual formats
+highlight {*.css,*.less,*.scss,*.markdown,*.md,*.mkd,*.org,*.pandoc,*.pdc,*.tex,
+          \*.txt,*.xml,*.log,*.rss,*.xul,*.json,*.yaml,*.yml,*.csv,*.plist,
+          \*.ini,*.cfg,*.rc,*.conf,*.spec,*.qrc,*.description,*.list,*.log.old,
+          \*.log.1,*.log.2,*.log.3,*.log.4,*.log.5,*.log.6,*.log.7,*.log.8,
+          \syslog,syslog.1,*.xsd,*.toml,*.rst}
         \ cterm=none ctermfg=red ctermbg=default
-
-" images
-highlight /.*\.asf$|.*\.avi$|.*\.bmp$|.*\.cgm$|.*\.dl$|.*\.emf$|.*\.flc$|
-          \.*\.fli$|.*\.flv$|.*\.gif$|.*\.gl$|.*\.jpeg$|.*\.jpg$|.*\.m2v$|
-          \.*\.m4v$|.*\.mjpeg$|.*\.mjpg$|.*\.mkv$|.*\.mng$|.*\.mov$|.*\.mp4$|
-          \.*\.mp4v$|.*\.mpeg$|.*\.mpg$|.*\.nuv$|.*\.ogm$|.*\.ogv$|.*\.ogx$|
-          \.*\.pbm$|.*\.pcx$|.*\.pgm$|.*\.png$|.*\.ppm$|.*\.qt$|.*\.rm$|
-          \.*\.rmvb$|.*\.svg$|.*\.svgz$|.*\.tga$|.*\.tif$|.*\.tiff$|.*\.vob$|
-          \.*\.webm$|.*\.wmv$|.*\.xbm$|.*\.xcf$|.*\.xpm$|.*\.xwd$|.*\.yuv$/I
+" still text files, but keeping this unoptimizable glob separately
+highlight {*[^0-9].[1-9]}
+        \ cterm=none ctermfg=red ctermbg=default
+" documents and text-based formats that need special handling
+highlight {*.doc,*.docx,*.xls,*.xlsm,*.xlsx,*.mobi,*.rtf,*.ppt,*.pptx,*.pdf,
+          \*.epub,*.fb2,*.djvu,*.djv,*.htm,*.html,*.shtml,*.xhtml,*.desktop,
+          \*.odg,*.odt,*.ods}
         \ cterm=none ctermfg=magenta ctermbg=default
-
 " audio
-highlight /.*\.aac$|.*\.au$|.*\.flac$|.*\.m4a$|.*\.mid$|.*\.midi$|.*\.mka$|
-          \.*\.mp3$|.*\.mpc$|.*\.oga$|.*\.ogg$|.*\.opus$|.*\.ra$|.*\.spx$|
-          \.*\.wav$|.*\.xspf$/I
+highlight {*.aac,*.ac3,*.anx,*.ape,*.asf,*.au,*.axa,*.cue,*.flac,*.m2a,*.m4a,
+          \*.mid,*.midi,*.mka,*.mp3,*.mpc,*.mpga,*.oga,*.ogg,*.ogx,*.ra,*.ram,
+          \*.spx,*.wav,*.wma}
         \ cterm=none ctermfg=cyan ctermbg=default
+" multimedia
+highlight {*.avi,*.axv,*.divx,*.flv,*.m2v,*.m4v,*.mp4,*.m4p,*.mp4v,*.mpeg,*.mpg,
+          \*.mkv,*.mov,*.nuv,*.ogv,*.qt,*.rm,*.ts,*.vob,*.webm,*.wmv,*.xvid,
+          \*.unknown_video}
+        \ cterm=none ctermfg=cyan ctermbg=default
+" images
+highlight {*.bmp,*.gif,*.jpeg,*.jpg,*.ico,*.png,*.ppm,*.svg,*.svgz,*.tga,*.tif,
+          \*.tiff,*.xbm,*.xcf,*.xpm,*.xspf,*.xwd,*.ai,*.pbm,*.pgm,*.webp}
+        \ cterm=none ctermfg=blue ctermbg=default
+" executables
+highlight {*.sh,*.bash,*.zsh,*.bat,*.btm,*.cmd,*.com,*.dll,*.exe,*.run,*.msu,
+          \*.msi,*.fish,*.AppImage}
+        \ cterm=none ctermfg=green ctermbg=default
+" source code
+highlight {*.patch,*.diff,*.py,*.cpp,*.hpp,*.c,*.h,*.cpp,*.hpp,*.cc,*.hh,*.ld,
+          \*.hs,*.php,*.lua,*.vim,*.vifm,*.asm,*.s,*.java,*.cxx,*.c++,*.go,
+          \*.pl,*.pm,*.t,*.cs,*.asp,*.dart,*.js,*.rb,*.scala,*.ts,*.coffee,
+          \*.ml,*.mli,*.rs,*.sql,*.qml,vifmrc,vimrc,.vimrc,*.flex,*.ypp,*.S,
+          \*.robot}
+        \ cterm=none ctermfg=green ctermbg=default
+" software documentation
+highlight {COPYRIGHT,COPYING*,BUGS,ChangeLog*,FAQ,INSTALL*,LICENCE,LICENSE,NEWS,
+          \README,README.*,AUTHORS,TODO,THANKS}
+        \ cterm=none ctermfg=yellow ctermbg=default

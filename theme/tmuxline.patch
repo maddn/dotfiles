@@ -1,0 +1,15 @@
+diff --git a/autoload/tmuxline/builder.vim b/autoload/tmuxline/builder.vim
+--- a/autoload/tmuxline/builder.vim
++++ b/autoload/tmuxline/builder.vim
+@@ -72,5 +72,11 @@ fun! s:make_separator(from_style, to_style, separator_type, separators, theme) abort
+     let to_color = tmuxline#util#get_color_definition_from_theme(a:to_style, a:theme)
+     let [fg, bg] = a:separator_type == s:LEFT_SEP ? [ from_color[1], to_color[1] ] : [ to_color[1], from_color[1] ]
+     let separator = a:separator_type == s:LEFT_SEP ? a:separators.left : a:separators.right
++    if a:from_style ==# 'win' || a:to_style ==# 'win'
++        let outside_bg = a:from_style ==# 'win' ? to_color[1] : from_color[1]
++        let inverse = (a:separator_type == s:LEFT_SEP) == (a:from_style ==# 'win')
++        let attr = s:SEP_ATTRIBUTES . (inverse ? ',reverse' : ',noreverse')
++        return '#[default,fg=' . outside_bg . ',' . attr . ']' . separator
++    endif
+     return tmuxline#util#tmux_color_attr(fg, bg, s:SEP_ATTRIBUTES) . separator
+ endfun

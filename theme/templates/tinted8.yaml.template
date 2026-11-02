@@ -1,0 +1,70 @@
+# Tinted8 scheme.
+# Generated from theme/palette.env.
+
+scheme:
+  system: "tinted8"
+  supports:
+    styling-spec: "0.2.0"
+  name: "maddn"
+  slug: "maddn"
+  author: "maddn"
+variant: "dark"
+
+palette:
+  # Backgrounds and neutral foregrounds
+  black: &background "#${BACKGROUND}"
+  black-dim: &deep_background "#${BLACK}"
+  black-bright: &raised "#${RAISED}"
+  gray-dim: &chrome "#${CHROME}"
+  gray: &muted "#${SUBDUED}"
+  gray-bright: &highlight "#${HIGHLIGHT}"
+  white: &foreground "#${FOREGROUND}"
+  white-dim: "#${INACTIVE}"
+  white-bright: *foreground
+
+  # Normal and bright accents deliberately share one colour.
+  red: &red "#${RED}"
+  red-bright: *red
+  orange: "#${ORANGE}"
+  yellow: &yellow "#${YELLOW}"
+  yellow-bright: *yellow
+  green: &green "#${GREEN}"
+  green-bright: *green
+  cyan: &cyan "#${CYAN}"
+  cyan-bright: *cyan
+  blue: &blue "#${BLUE}"
+  blue-bright: *blue
+  magenta: &magenta "#${MAGENTA}"
+  magenta-bright: *magenta
+  brown: "#${BROWN}"
+
+  # Diff backgrounds
+  red-dim: "#${DIM_RED}"
+  green-dim: "#${DIM_GREEN}"
+  blue-dim: "#${DIM_BLUE}"
+
+syntax:
+  comment: *cyan
+  constant: *red
+  string: *yellow
+  entity.name: *green
+  entity.name.label: *blue
+  entity.name.tag: *blue
+  entity.other.attribute-name: *green
+  keyword: *blue
+  keyword.operator: *red
+  storage: *green
+  variable.parameter: *foreground
+  meta.preprocessor: *magenta
+  markup.heading: *blue
+  markup.link: *blue
+  markup.raw: *green
+
+ui:
+  gutter.foreground: *chrome
+  chrome.background.normal: *chrome
+  chrome.background.dark: *deep_background
+  selection.background: *highlight
+  highlight.text.background: *highlight
+  highlight.line.background: "#${CURSOR_LINE}"
+  status.info: *cyan

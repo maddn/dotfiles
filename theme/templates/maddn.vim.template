@@ -1,75 +1,59 @@
+" Airline theme.
+" Generated from theme/palette.env.
+
 scriptencoding utf-8
 
-let s:Black =       [ 0,  '#000000' ]
-let s:DarkRed =     [ 1,  '#805959' ]
-let s:DarkGreen =   [ 2,  '#598059' ]
-let s:DarkYellow =  [ 3,  '#807359' ]
-let s:DarkBlue =    [ 4,  '#596D80' ]
-let s:DarkMagenta = [ 5,  '#735980' ]
-let s:DarkCyan =    [ 6,  '#598079' ]
-let s:Grey =        [ 7,  '#999999' ]
-
-let s:DarkGrey =    [ 8,  '#333333' ]
-let s:Red =         [ 9,  '#994D4D' ]
-let s:Green =       [ 10, '#6B996B' ]
-let s:Yellow =      [ 11, '#998A6B' ]
-let s:Blue =        [ 12, '#6B8299' ]
-let s:Magenta =     [ 13, '#896A99' ]
-let s:Cyan =        [ 14, '#6B9991' ]
-let s:White =       [ 15, '#B3B3B3' ]
+let s:Background =     [ 0,  '#${BACKGROUND}' ]
+let s:Black =          [ 22, '#${BLACK}' ]
+let s:DarkGrey =       [ 19, '#${CHROME}' ]
+let s:Grey =           [ 7,  '#${FOREGROUND}' ]
+let s:BrightGrey =     [ 21, '#${INACTIVE}' ]
+let s:Red =            [ 1,  '#${RED}' ]
+let s:Green =          [ 2,  '#${GREEN}' ]
+let s:Yellow =         [ 3,  '#${YELLOW}' ]
+let s:Blue =           [ 4,  '#${BLUE}' ]
+let s:Magenta =        [ 5,  '#${MAGENTA}' ]
+let s:Cyan =           [ 6,  '#${CYAN}' ]
 
 function! s:ColorArray(colorfg, colorbg)
-  return [ a:colorfg[1], a:colorbg[1], a:colorfg[0], a:colorbg[0] ]
-endfunction
-
-function! s:AddWarnAndError(color_map)
-  let a:color_map.airline_warning = s:ColorArray( s:DarkGrey, s:Grey  )
-  let a:color_map.airline_error   = s:ColorArray( s:DarkGrey, s:Red   )
+  return [ a:colorfg[1], a:colorbg[1], a:colorfg[0], a:colorbg[0], 'NONE' ]
 endfunction
 
 function! s:ColorMap(az, by, cx)
-  let color_map = airline#themes#generate_color_map(a:az, a:by, a:cx)
-  call s:AddWarnAndError(color_map)
+  let color_map = airline#themes#generate_color_map(a:az, a:by, a:cx, a:cx, a:by, a:az)
+  let color_map.airline_warning = s:ColorArray( s:Background, s:Yellow )
+  let color_map.airline_error = s:ColorArray( s:Background, s:Red )
   return color_map
 endfunction
 
-function! s:ColorMapOverride(section, color_array)
-  let color_map = { a:section: a:color_array }
-  call s:AddWarnAndError(color_map)
-  return color_map
-endfunction
+let s:N1 = s:ColorArray( s:Background, s:Yellow )
+let s:N2 = s:ColorArray( s:Grey, s:DarkGrey )
+let s:N3 = s:ColorArray( s:Cyan, s:Black )
+let s:I1 = s:ColorArray( s:Background, s:Blue )
+let s:V1 = s:ColorArray( s:Background, s:Magenta )
+let s:R1 = s:ColorArray( s:Background, s:Red )
+let s:C1 = s:ColorArray( s:Background, s:Green )
+let s:IA = s:ColorArray( s:DarkGrey, s:Black )
 
-let s:N1        = s:ColorArray( s:DarkGrey,     s:DarkYellow  )
-let s:N2        = s:ColorArray( s:Grey,         s:DarkGrey    )
-let s:N3        = s:ColorArray( s:DarkCyan,     s:Black       )
+let s:ModMap = {
+  \ 'airline_c': s:ColorArray( s:Background, s:Red ),
+  \ 'airline_warning': s:ColorArray( s:Background, s:Yellow ),
+  \ 'airline_error': s:ColorArray( s:Background, s:Red ),
+  \ }
 
-let s:I1        = s:ColorArray( s:DarkGrey,     s:Cyan        )
-let s:I2        = s:ColorArray( s:DarkGrey,     s:DarkBlue    )
-let s:I3        = s:N3
-
-let s:V1        = s:ColorArray( s:DarkGrey,     s:Magenta     )
-let s:V2        = s:N2
-let s:V3        = s:N3
-
-let s:IA1       = s:ColorArray( s:Black,        s:DarkGrey    )
-let s:IA2       = s:ColorArray( s:DarkGrey,     s:Black       )
-let s:IA3       = s:ColorArray( s:Black,        s:DarkGrey    )
-
-let s:Mod       = s:ColorArray( s:DarkGrey,     s:DarkRed     )
-let s:IAMod     = s:ColorArray( s:DarkGrey,     s:Grey        )
-
-let s:ModMap    = s:ColorMapOverride( 'airline_c', s:Mod )
-
-let g:airline#themes#maddn_airline#palette = {
-  \   'normal':             s:ColorMap( s:N1,   s:N2,   s:N3),
-  \   'insert':             s:ColorMap( s:I1,   s:I2,   s:I3),
-  \   'replace':            s:ColorMap( s:I1,   s:I2,   s:I3),
-  \   'visual':             s:ColorMap( s:V1,   s:V2,   s:V3),
-  \   'inactive':           s:ColorMap( s:IA1,  s:IA2,  s:IA3),
-  \   'normal_modified':    s:ModMap,
-  \   'insert_modified':    s:ModMap,
-  \   'replace_modified':   s:ModMap,
-  \   'visual_modified':    s:ModMap,
-  \   'inactive_modified':  s:ColorMapOverride( 'airline_c', s:IAMod ),
-  \   'accents':            { 'red':  [ s:Red[1], '', s:Red[0], '' ] }
+let g:airline#themes#maddn#palette = {
+  \ 'normal':              s:ColorMap( s:N1, s:N2, s:N3 ),
+  \ 'insert':              s:ColorMap( s:I1, s:N2, s:N3 ),
+  \ 'visual':              s:ColorMap( s:V1, s:N2, s:N3 ),
+  \ 'replace':             s:ColorMap( s:R1, s:N2, s:N3 ),
+  \ 'commandline':         s:ColorMap( s:C1, s:N2, s:N3 ),
+  \ 'inactive':            airline#themes#generate_color_map( s:IA, s:IA, s:IA, s:IA, s:IA, s:IA ),
+  \ 'normal_modified':     s:ModMap,
+  \ 'insert_modified':     s:ModMap,
+  \ 'visual_modified':     s:ModMap,
+  \ 'replace_modified':    s:ModMap,
+  \ 'commandline_modified': s:ModMap,
+  \ 'inactive_modified':   { 'airline_c': s:ColorArray( s:DarkGrey, s:BrightGrey ) },
+  \ 'tabline':             { 'airline_tab': s:ColorArray( s:Black, s:DarkGrey ) },
+  \ 'accents':             { 'red': [ s:Red[1], '', s:Red[0], '', 'NONE' ] },
   \ }

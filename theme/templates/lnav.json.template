@@ -4,180 +4,207 @@
         "theme-defs": {
             "maddn": {
                 "vars": {
-                    "black":      "#000000",
-                    "red":        "#994D4D",
-                    "green":      "#6B996B",
-                    "yellow":     "#998A6B",
-                    "blue":       "#6B8299",
-                    "magenta":    "#896A99",
-                    "cyan":       "#6B9991",
-                    "white":      "#B3B3B3",
-                    "grey":       "#777777",
-                    "dark_grey":  "#333333"
+                    "palette_background": "#${BACKGROUND}",
+                    "palette_red":        "#${RED}",
+                    "palette_green":      "#${GREEN}",
+                    "palette_yellow":     "#${YELLOW}",
+                    "palette_blue":       "#${BLUE}",
+                    "palette_magenta":    "#${MAGENTA}",
+                    "palette_cyan":       "#${CYAN}",
+                    "palette_foreground": "#${FOREGROUND}",
+                    "palette_subdued":    "#${SUBDUED}",
+                    "palette_raised":     "#${RAISED}",
+                    "palette_chrome":     "#${CHROME}",
+                    "palette_black":      "#${BLACK}"
                 },
                 "styles": {
                     "identifier": {
-                        "color": "$grey"
+                        "color": "$palette_subdued"
                     },
                     "text": {
-                        "color": "$white"
+                        "color": "$palette_foreground",
+                        "background-color": "$palette_background"
                     },
                     "alt-text": {
-                        "color": "$white"
+                        "color": "$palette_foreground"
                     },
                     "ok": {
-                        "color": "$green"
+                        "color": "$palette_green"
                     },
                     "error": {
-                        "color": "$red"
+                        "color": "$palette_red"
                     },
                     "warning": {
-                        "color": "$yellow"
+                        "color": "$palette_yellow"
                     },
                     "hidden": {
-                        "color": "$yellow"
+                        "color": "$palette_yellow"
+                    },
+                    "cursor-line": {
+                        "background-color": "$palette_raised"
+                    },
+                    "disabled-cursor-line": {
+                        "background-color": "$palette_black"
                     },
                     "adjusted-time": {
-                        "color": "$green"
+                        "color": "$palette_green"
                     },
                     "skewed-time": {
-                        "color": "$yellow"
+                        "color": "$palette_yellow"
                     },
                     "offset-time": {
-                        "color": "$red"
+                        "color": "$palette_red"
                     },
                     "invalid-msg": {
-                        "color": "$yellow"
+                        "color": "$palette_yellow"
                     },
                     "focused": {
-                        "color": "$dark_grey",
-                        "background-color": "$yellow"
+                        "color": "$palette_background",
+                        "background-color": "$palette_yellow"
                     },
                     "disabled-focused": {
-                        "color": "$grey",
-                        "background-color": "$black"
+                        "color": "$palette_subdued",
+                        "background-color": "$palette_black"
                     },
                     "popup": {
-                        "color": "$black",
-                        "background-color": "$grey"
+                        "color": "$palette_foreground",
+                        "background-color": "$palette_raised"
+                    },
+                    "popup-border": {
+                        "color": "$palette_chrome"
+                    },
+                    "table-border": {
+                        "color": "$palette_chrome"
+                    },
+                    "quote-border": {
+                        "color": "$palette_chrome"
+                    },
+                    "footnote-border": {
+                        "color": "$palette_chrome"
+                    },
+                    "snippet-border": {
+                        "color": "$palette_chrome"
                     },
                     "scrollbar": {
-                        "color": "$dark_grey",
-                        "background-color": "$yellow"
+                        "color": "$palette_background",
+                        "background-color": "$palette_chrome"
                     }
                 },
                 "syntax-styles": {
+                    "code-border": {
+                        "color": "$palette_chrome"
+                    },
                     "keyword": {
-                        "color": "$blue"
+                        "color": "$palette_blue"
                     },
                     "string": {
-                        "color": "$cyan"
+                        "color": "$palette_cyan"
                     },
                     "comment": {
-                        "color": "$cyan"
+                        "color": "$palette_cyan"
                     },
                     "doc-directive": {
-                        "color": "$magenta"
+                        "color": "$palette_magenta"
                     },
                     "variable": {
-                        "color": "$green"
+                        "color": "$palette_green"
                     },
                     "symbol": {
-                        "color": "$magenta"
+                        "color": "$palette_magenta"
                     },
                     "re-special": {
-                        "color": "$cyan"
+                        "color": "$palette_cyan"
                     },
                     "re-repeat": {
-                        "color": "$yellow"
+                        "color": "$palette_yellow"
                     },
                     "diff-delete": {
-                        "color": "$red"
+                        "color": "$palette_red"
                     },
                     "diff-add": {
-                        "color": "$green"
+                        "color": "$palette_green"
                     },
                     "diff-section": {
-                        "color": "$yellow"
+                        "color": "$palette_yellow"
                     },
                     "file": {
-                        "color": "$blue"
+                        "color": "$palette_blue"
                     }
                 },
                 "status-styles": {
                     "disabled-title": {
-                        "color": "$grey"
+                        "color": "$palette_subdued"
                     },
                     "title": {
-                        "color": "$dark_grey",
-                        "background-color": "$yellow"
+                        "color": "$palette_background",
+                        "background-color": "$palette_yellow"
                     },
                     "subtitle": {
-                        "color": "$yellow",
-                        "background-color": "$black"
+                        "color": "$palette_yellow",
+                        "background-color": "$palette_black"
                     },
                     "title-hotkey": {
-                        "color": "$black",
-                        "background-color": "$yellow",
+                        "color": "$palette_black",
+                        "background-color": "$palette_yellow",
                         "underline": true
                     },
                     "hotkey": {
-                        "color": "$grey",
-                        "background-color": "$dark_grey",
+                        "color": "$palette_subdued",
+                        "background-color": "$palette_raised",
                         "underline": true
                     },
                     "text": {
-                        "color": "$white",
-                        "background-color": "$dark_grey"
+                        "color": "$palette_foreground",
+                        "background-color": "$palette_raised"
                     },
                     "warn": {
-                        "color": "$yellow",
-                        "background-color": "$dark_grey"
+                        "color": "$palette_yellow",
+                        "background-color": "$palette_raised"
                     },
                     "alert": {
-                        "color": "$red",
-                        "background-color": "$dark_grey"
+                        "color": "$palette_red",
+                        "background-color": "$palette_raised"
                     },
                     "active": {
-                        "color": "$white",
-                        "background-color": "$dark_grey"
+                        "color": "$palette_foreground",
+                        "background-color": "$palette_raised"
                     },
                     "inactive": {
-                        "color": "$grey",
-                        "background-color": "$black"
+                        "color": "$palette_subdued",
+                        "background-color": "$palette_black"
                     }
                 },
                 "log-level-styles": {
                     "warning": {
-                        "color": "$yellow"
+                        "color": "$palette_yellow"
                     },
                     "error": {
-                        "color": "$red"
+                        "color": "$palette_red"
                     },
                     "critical": {
-                        "color": "$red"
+                        "color": "$palette_red"
                     },
                     "fatal": {
-                        "color": "$red"
+                        "color": "$palette_red"
                     }
                 },
                 "highlights": {
                     "colors": {
                         "pattern": "(?:#[a-fA-F0-9]{6}|#[a-fA-F0-9]{3}\\b)",
                         "style": {
-                            "color": "$magenta"
+                            "color": "$palette_magenta"
                         }
                     },
                     "ipv4": {
                         "pattern": "\\b(?<!\\d\\.)\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b(?!\\.\\d)",
                         "style": {
-                            "color": "$green"
+                            "color": "$palette_green"
                         }
                     },
                     "xml": {
                         "pattern": "(?<!<)</?([^ <>=]+)[^>]*>",
                         "style": {
-                            "color": "$cyan"
+                            "color": "$palette_cyan"
                         }
                     }
                 }

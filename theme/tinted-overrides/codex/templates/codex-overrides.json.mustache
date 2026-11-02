@@ -1,0 +1,32 @@
+{
+  "name": "{{ scheme.slug }}",
+  "settings": {
+    "background": "#00000001",
+    "foreground": "#00000001",
+    "gutter": "#00000001",
+    "gutterForeground": "#00000001"
+  },
+  "tokenColors": [
+    {
+      "name": "Codex added-line background",
+      "scope": "markup.inserted",
+      "settings": {
+        "background": "#{{ palette.green.dim.hex }}"
+      }
+    },
+    {
+      "name": "Codex deleted-line background",
+      "scope": "markup.deleted",
+      "settings": {
+        "background": "#{{ palette.red.dim.hex }}"
+      }
+    },
+    {
+      "name": "Codex accents, links and lists",
+      "scope": "markup.underline.link.markdown, codex.accent, markup.list.numbered.markdown",
+      "settings": {
+        "foreground": "#{{ syntax.markup.link.hex }}"
+      }
+    }
+  ]
+}
