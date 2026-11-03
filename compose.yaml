@@ -19,6 +19,8 @@ services:
       timeout: 1s
       retries: 30
     network_mode: bridge
+    group_add:
+      - "0"  # Docker Desktop's socket group
     cap_add:
       - NET_ADMIN
     security_opt:

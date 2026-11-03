@@ -12,4 +12,3 @@ function codex
 end
 
 [ -d ~/nso-current ] && bass source ~/nso-current/ncsrc
-sudo chown mmaddern: /run/host-services/ssh-auth.sock

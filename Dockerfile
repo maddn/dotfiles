@@ -75,9 +75,7 @@ RUN apt-get update && \
       vifm \
       xmlstarlet \
       xsltproc && \
-    rm -rf /var/lib/apt/lists/* /root/.cache && \
-    chmod +s /usr/sbin/syslog-ng && \
-    chmod +s /usr/sbin/sshd
+    rm -rf /var/lib/apt/lists/* /root/.cache
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
       gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
@@ -91,8 +89,7 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
       docker-ce-cli \
       docker-buildx-plugin \
       docker-compose-plugin && \
-    rm -rf /var/lib/apt/lists/* /root/.cache && \
-    chmod +s /usr/bin/docker
+    rm -rf /var/lib/apt/lists/* /root/.cache
 
 RUN echo "ListenAddress 127.0.0.1" > /etc/ssh/sshd_config.d/10-self-login-only.conf && \
     echo "PasswordAuthentication no" >> /etc/ssh/sshd_config.d/10-self-login-only.conf
@@ -118,8 +115,13 @@ RUN --mount=type=secret,id=PASSWORD,env=PASSWORD \
             --groups sudo,adm \
             ${USER_NAME} && \
     echo "${USER_NAME}:${PASSWORD}" | chpasswd && \
-    echo "${USER_NAME} ALL=(ALL) NOPASSWD: /usr/bin/chown ${USER_NAME}\: /run/host-services/ssh-auth.sock" > /etc/sudoers.d/ssh && \
-    echo "${USER_NAME} ALL=(ALL) NOPASSWD: /home/${USER_NAME}/git/scripts/dcloud.sh" > /etc/sudoers.d/dcloud
+    install -m 0440 /dev/null /etc/sudoers.d/maddn-dev && \
+    cat > /etc/sudoers.d/maddn-dev <<EOF
+${USER_NAME} ALL=(root) NOPASSWD: /usr/bin/chown ${USER_NAME}\: /run/host-services/ssh-auth.sock
+${USER_NAME} ALL=(root) NOPASSWD: /usr/sbin/sshd ""
+${USER_NAME} ALL=(root) NOPASSWD: /usr/sbin/syslog-ng --no-caps
+${USER_NAME} ALL=(root) NOPASSWD: /home/${USER_NAME}/git/scripts/dcloud.sh
+EOF
 
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
