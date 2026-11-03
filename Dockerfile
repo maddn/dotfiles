@@ -156,8 +156,11 @@ RUN --mount=type=bind,target=git/dotfiles \
       pyyaml \
       requests \
       setproctitle \
-      telnetlib3 \
-      git/dotfiles/pyvxr-ovxr.tar.gz
+      telnetlib3 && \
+    if ls git/dotfiles/python-packages/*.tar.gz > /dev/null 2>&1; then \
+      pip3 install --user --break-system-packages \
+        git/dotfiles/python-packages/*.tar.gz; \
+    fi
 
 # Avoid pyang's Python 3.14-incompatible module discovery (pkgutil.find_loader).
 ENV YANG_INSTALL=/home/${USER_NAME}/.local/share

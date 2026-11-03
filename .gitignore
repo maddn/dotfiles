@@ -1,4 +1,5 @@
 .DS_Store
 nso-installer/nso-*.linux.*.installer.bin
+python-packages/*.tar.gz
 ca-certificates/
 theme/generated/
