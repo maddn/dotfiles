@@ -8,7 +8,6 @@ DOT_FILES = \
 	.pylintrc \
 	.tmux.conf \
 	.zshrc \
-	.yang/yang.settings \
 	.config/fish/config.fish \
 	.config/fish/fish_variables \
 	.config/fish/functions/fish_default_mode_prompt.fish \
@@ -117,6 +116,9 @@ $(HOME)/.local/bin/yang-language-server:
 	unzip -q /tmp/yang-language-server.zip -d $(HOME)/.local/lib && \
 	ln -s $(HOME)/.local/lib/yang-language-server-0.7.6/bin/yang-language-server $@ && \
 	rm /tmp/yang-language-server.zip
+	[ -d $(HOME)/.yang ] || mkdir -p $(HOME)/.yang
+	printf '{\n  "yangPath": "%s/nso-current/src/ncs/yang"\n}\n' \
+	  "$(HOME)" > $(HOME)/.yang/yang.settings
 
 $(HOME)/.local/bin/lemminx:
 	[ -d $(@D) ] || mkdir -p $(@D)

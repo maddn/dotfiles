@@ -180,4 +180,4 @@ RUN --mount=type=bind,source=nso-installer,target=nso-installer \
 RUN MANPATH=:/home/${USER_NAME}/nso-current/man \
     fish --no-config -c fish_update_completions
 
-CMD ["/bin/sh", "/home/mmaddern/.docker_login.sh"]
+CMD ["/bin/sh", ".docker_login.sh"]
