@@ -1,4 +1,4 @@
-export LESSOPEN="| [ -x ~/.local/bin/pygmentize ] && ~/.local/bin/pygmentize -f ~/.config/pygments/pygments_formatter.py -x -g %s"
+export LESSOPEN="| pygmentize -f ~/.config/pygments/pygments_formatter.py -x -g %s"
 export LESS=-R
 
 # Less Colors for Man Pages

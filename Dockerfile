@@ -60,9 +60,7 @@ RUN apt-get update && \
       openssh-server \
       pkg-config \
       python3-dev \
-      python3-neovim \
-      python-is-python3 \
-      python3-pip \
+      python3-venv \
       shellcheck \
       sudo \
       syslog-ng \
@@ -143,8 +141,12 @@ RUN --mount=type=bind,target=git/dotfiles \
 
 COPY --chown=${USER_ID}:${GROUP_ID} fish_variables .config/fish
 
+# NSO Python VMs inherit the shared interpreter through PATH.
+RUN python3 -m venv .local/share/venvs/dev
+ENV PATH=/home/${USER_NAME}/.local/share/venvs/dev/bin:${PATH}
+
 RUN --mount=type=bind,target=git/dotfiles \
-    pip3 install --user --break-system-packages \
+    pip3 install \
       setuptools==81.0.0 \
       docker \
       libvirt-python \
@@ -160,12 +162,9 @@ RUN --mount=type=bind,target=git/dotfiles \
       setproctitle \
       telnetlib3 && \
     if ls git/dotfiles/python-packages/*.tar.gz > /dev/null 2>&1; then \
-      pip3 install --user --break-system-packages \
+      pip3 install \
         git/dotfiles/python-packages/*.tar.gz; \
     fi
-
-# Avoid pyang's Python 3.14-incompatible module discovery (pkgutil.find_loader).
-ENV YANG_INSTALL=/home/${USER_NAME}/.local/share
 
 RUN --mount=type=bind,source=nso-installer,target=nso-installer \
     if [ -n "$(ls nso-installer)" ]; then \

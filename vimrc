@@ -302,7 +302,7 @@ function! s:PyangTree(files)
   endif
   let yangpath = $NCS_DIR . '/src/ncs/yang:' . join(paths, ':')
   vnew
-  silent execute 'read !~/.local/bin/pyang --format tree --path ' . shellescape(yangpath) . ' ' . a:files
+  silent execute 'read !pyang --format tree --path ' . shellescape(yangpath) . ' ' . a:files
   1
 endfunction
 
